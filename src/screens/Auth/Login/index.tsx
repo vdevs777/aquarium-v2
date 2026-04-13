@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui/input";
 import { AuthLayout } from "../layout";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +6,6 @@ import { InputController } from "@/components/input-controller";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ChevronRight } from "lucide-react";
-import { authService } from "@/services/auth.service";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 
@@ -26,8 +24,17 @@ export function LoginScreen() {
     <AuthLayout title="Acesse sua conta">
       <form className="w-full space-y-6" onSubmit={handleSubmit(login)}>
         <div className="space-y-4">
-          <InputController control={control} name="email" />
-          <InputController control={control} name="password" secureTextEntry />
+          <InputController
+            control={control}
+            name="email"
+            placeholder="E-mail"
+          />
+          <InputController
+            control={control}
+            name="password"
+            secureTextEntry
+            placeholder="Senha"
+          />
           <div className="flex flex-end justify-between items-center">
             <Button
               className="h-8 font-medium"
