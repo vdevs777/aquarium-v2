@@ -1,6 +1,7 @@
 import { handleApiError } from "@/api/helpers/handle-api-error";
 import { LoginSchema } from "@/schemas/login-schema";
 import { authService } from "@/services/auth.service";
+import { setCursor } from "@/utils/set-cursor";
 import { useRouter } from "next/router";
 
 export function useAuth() {

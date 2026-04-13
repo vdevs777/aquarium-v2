@@ -9,8 +9,7 @@ type CursorType =
   | "grab"
   | "grabbing"
   | "crosshair"
-  | "progress"
-  | string;
+  | "progress";
 
 export function setCursor(cursor: CursorType, element?: HTMLElement | null) {
   const target = element ?? document.body;

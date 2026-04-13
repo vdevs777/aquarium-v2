@@ -24,7 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={inter.className}>
+      <div className={`${inter.className} bg-white`}>
         <Component {...pageProps} />
       </div>
       <Toaster />
