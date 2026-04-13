@@ -1,5 +1,6 @@
 import api from "@/api";
 
+import { RegisterUser } from "@/interfaces/http/Auth/RegisterUser";
 import { LoginSchema } from "@/schemas/login-schema";
 
 async function login(request: LoginSchema): Promise<string> {
@@ -7,4 +8,12 @@ async function login(request: LoginSchema): Promise<string> {
   return data;
 }
 
-export const authService = { login };
+async function register(request: RegisterUser): Promise<"success" | "pending"> {
+  const response = await api.post("/register", request);
+
+  if (response.status === 201) return "pending";
+
+  return "success";
+}
+
+export const authService = { login, register };

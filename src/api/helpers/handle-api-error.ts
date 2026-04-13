@@ -9,30 +9,19 @@ export type ApiErrorResponse = {
 };
 
 export function handleApiError(error: unknown) {
-  const maybeApiError = (error as any)?.response?.data;
+  const err = error as any;
 
-  if (isApiErrorResponse(maybeApiError)) {
-    const title = maybeApiError.detail || maybeApiError.title;
+  const data = err?.response?.data ?? err?.data ?? err;
+
+  if (isApiErrorResponse(data)) {
+    const title = data.detail || data.title;
 
     const description =
-      maybeApiError.detail && maybeApiError.detail !== maybeApiError.title
-        ? maybeApiError.title
-        : undefined;
+      data.detail && data.detail !== data.title ? data.title : undefined;
 
     toast({
       title,
       description,
-      variant: "destructive",
-    });
-
-    return;
-  }
-
-  if (isApiErrorResponse(error)) {
-    const title = error.detail || error.title;
-
-    toast({
-      title,
       variant: "destructive",
     });
 
