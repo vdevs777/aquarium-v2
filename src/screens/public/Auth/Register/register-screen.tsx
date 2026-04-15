@@ -42,7 +42,6 @@ export function RegisterScreen() {
             control={control}
             name="telefone"
             placeholder="Telefone"
-            mask={phoneMask.mask}
           />
           <InputController
             control={control}

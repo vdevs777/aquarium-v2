@@ -5,6 +5,8 @@ import { env } from "@/env";
 import "@/styles/globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
+import { useRouter } from "next/router";
+import { Layout } from "@/components/layout";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -12,7 +14,10 @@ const inter = Inter({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
   const queryClient = new QueryClient();
+
+  const pagesWithoutLayout = ["/login", "/register"];
 
   useEffect(() => {
     if (env.NEXT_PUBLIC_API_MODE === "mock") {
@@ -25,7 +30,13 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <div className={`${inter.className} bg-white`}>
-        <Component {...pageProps} />
+        {pagesWithoutLayout.includes(router.pathname) ? (
+          <Component {...pageProps} />
+        ) : (
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        )}
       </div>
       <Toaster />
     </QueryClientProvider>

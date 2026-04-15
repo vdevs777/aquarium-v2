@@ -32,6 +32,14 @@ export function InputController<T extends FieldValues>({
             <Component
               {...field}
               {...rest}
+              onChange={(e) => {
+                const value =
+                  rest.type === "number"
+                    ? e.target.valueAsNumber
+                    : e.target.value;
+
+                field.onChange(value);
+              }}
               mask={mask}
               ref={field.ref}
               error={errorMessage}
