@@ -1,7 +1,7 @@
 import { AuthLayout } from "../layout";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputController } from "@/components/input-controller";
+import { InputController } from "@/components/controllers/input-controller";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { registerSchema, RegisterSchema } from "@/schemas/register-schema";

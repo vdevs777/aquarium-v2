@@ -1,4 +1,4 @@
-import { errorMessages } from "@/resources/error-messages";
+import { errorMessages } from "@/constants/error-messages";
 import { z } from "zod";
 
 export const productionUnitModelSchema = z.object({

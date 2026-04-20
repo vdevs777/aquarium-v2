@@ -1,7 +1,7 @@
 import { handleApiError } from "@/api/helpers/handle-api-error";
 import { FormBox } from "@/components/form-box";
 import { FormRow } from "@/components/form-row";
-import { InputController } from "@/components/input-controller";
+import { InputController } from "@/components/controllers/input-controller";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
@@ -50,6 +50,7 @@ export function ProductionUnitModelForm({
         : 0,
       volumeM3: defaultValues?.volumeM3 ?? 0,
       areaSuperficieM2: defaultValues?.areaSuperficieM2 ?? 0,
+      ...defaultValues,
     },
   });
 

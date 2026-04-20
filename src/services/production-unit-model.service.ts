@@ -1,5 +1,5 @@
 import api from "@/api";
-import { ProductionUnitModelModel } from "@/interfaces/models/ProductionUnitModelModel";
+import { ProductionUnitModelModel } from "@/interfaces/models/ProductionUnitModel";
 import { ProductionUnitModelSchema } from "@/schemas/production-unit-model-schema";
 
 async function create(request: ProductionUnitModelSchema) {
@@ -11,4 +11,18 @@ async function create(request: ProductionUnitModelSchema) {
   return data;
 }
 
-export const productionUnitModelService = { create };
+async function getAll() {
+  const { data } = await api.get<ProductionUnitModelModel[]>(
+    "/modelos-unidade-produtiva",
+  );
+  return data;
+}
+
+async function getById(id: number) {
+  const { data } = await api.get<ProductionUnitModelModel>(
+    `/modelos-unidade-produtiva/${id}`,
+  );
+  return data;
+}
+
+export const productionUnitModelService = { create, getAll, getById };

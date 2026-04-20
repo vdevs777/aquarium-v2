@@ -15,9 +15,16 @@ const inter = Inter({
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const queryClient = new QueryClient();
 
-  const pagesWithoutLayout = ["/login", "/register"];
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  });
+
+  const pagesWithoutLayout = ["/login", "/register", "/404"];
 
   useEffect(() => {
     if (env.NEXT_PUBLIC_API_MODE === "mock") {

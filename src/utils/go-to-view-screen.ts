@@ -1,7 +1,5 @@
-import { useRouter } from "next/router";
+import Router from "next/router";
 
-export function goToViewScreen(id: string) {
-  const router = useRouter();
-
-  router.push(`view/${id}`);
+export function goToViewScreen(id: number | string) {
+  Router.replace(`view/${id}`);
 }

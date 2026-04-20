@@ -1,3 +1,12 @@
-import { createProductionUnitModelHandler } from "./create";
+import { createProductionUnitModelHandler } from "./POST";
 
-export const productionUnitModelHandlers = [createProductionUnitModelHandler];
+import {
+  getProductionUnitModelHandler,
+  getProductionUnitModelByIdHandler,
+} from "./GET";
+
+export const productionUnitModelHandlers = [
+  createProductionUnitModelHandler,
+  getProductionUnitModelHandler,
+  getProductionUnitModelByIdHandler,
+];

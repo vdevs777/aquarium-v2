@@ -13,7 +13,7 @@ export function Layout({ children }: PropsWithChildren) {
   return (
     <div className="min-h-screen flex flex-col">
       <Header showSheet={showSheet} />
-      <div className="flex flex-row">
+      <div className="flex flex-1">
         <Sidebar />
         <Sheet open={isShowSheet} onOpenChange={setIsShowSheet}>
           <SheetTrigger asChild></SheetTrigger>
@@ -23,6 +23,9 @@ export function Layout({ children }: PropsWithChildren) {
         </Sheet>
         <div className="p-5 bg-gray-50 w-full">{children}</div>
       </div>
+      <footer className="bg-white h-auto text-xs py-1 flex items-center justify-center">
+        © 2024-2026 IotarJR - Versão: xxx-xxx
+      </footer>
     </div>
   );
 }

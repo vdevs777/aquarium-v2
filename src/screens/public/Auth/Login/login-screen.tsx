@@ -2,7 +2,7 @@ import { AuthLayout } from "../layout";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, loginSchema } from "@/schemas/login-schema";
-import { InputController } from "@/components/input-controller";
+import { InputController } from "@/components/controllers/input-controller";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ChevronRight } from "lucide-react";
