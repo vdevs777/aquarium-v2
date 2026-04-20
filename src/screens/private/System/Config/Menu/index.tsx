@@ -1,4 +1,11 @@
-import { Blend, BrickWall, Building2, Settings, Wheat } from "lucide-react";
+import {
+  Blend,
+  BrickWall,
+  Building2,
+  Fish,
+  Settings,
+  Wheat,
+} from "lucide-react";
 import { ConfigCard } from "./components/config-card";
 import { PageHeader } from "@/components/page-header";
 
@@ -24,6 +31,11 @@ export function ConfigScreen() {
               icon: <Wheat size={20} />,
               name: "Ração",
               to: "/config/fish-feed/list",
+            },
+            {
+              icon: <Fish size={20} />,
+              name: "Espécies",
+              to: "/config/species/list",
             },
           ]}
         />

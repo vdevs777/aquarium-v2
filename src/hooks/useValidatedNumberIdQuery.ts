@@ -1,11 +1,13 @@
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+
 type UseValidatedNumberIdQueryProps<TData> = {
   queryKey: string[];
   queryFn: (id: number) => Promise<TData>;
   options?: Omit<UseQueryOptions<TData>, "queryKey" | "queryFn">;
 };
+
 export function useValidatedNumberIdQuery<TData>({
   queryKey,
   queryFn,

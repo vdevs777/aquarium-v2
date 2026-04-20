@@ -18,12 +18,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Loader2, Trash } from "lucide-react";
+import { Trash, Edit, Plus } from "lucide-react";
 import React from "react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/router";
-import { Button } from "@/components/ui/button";
 import { Spinner } from "../spinner";
+import { Button } from "../button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,6 +33,8 @@ interface DataTableProps<TData, TValue> {
   hasClick?: boolean;
   onClickRow?: (data: TData) => void;
   onDelete?: (data: TData) => void;
+  onEdit?: (data: TData) => void;
+  onCreate?: () => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -43,29 +45,45 @@ export function DataTable<TData, TValue>({
   hasClick = false,
   onClickRow,
   onDelete,
+  onEdit,
+  onCreate,
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
-  const actionColumn: ColumnDef<TData> | null = onDelete
-    ? {
-        id: "actions",
-        header: "",
-        cell: ({ row }) => (
-          <div className="flex justify-end h-">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(row.original);
-              }}
-              className="cursor-pointer h-5 w-8 flex items-center justify-end"
-            >
-              <Trash className="size-4 text-destructive" />
-            </button>
-          </div>
-        ),
-      }
-    : null;
+  const actionColumn: ColumnDef<TData> | null =
+    onDelete || onEdit
+      ? {
+          id: "actions",
+          header: "",
+          cell: ({ row }) => (
+            <div className="flex justify-end gap-2">
+              {onEdit && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEdit(row.original);
+                  }}
+                  className="cursor-pointer flex items-center"
+                >
+                  <Edit className="size-4 text-muted-foreground" />
+                </button>
+              )}
+              {onDelete && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(row.original);
+                  }}
+                  className="cursor-pointer flex items-center"
+                >
+                  <Trash className="size-4 text-destructive" />
+                </button>
+              )}
+            </div>
+          ),
+        }
+      : null;
 
   const table = useReactTable({
     data: data ?? [],
@@ -119,38 +137,67 @@ export function DataTable<TData, TValue>({
               </TableCell>
             </TableRow>
           ) : table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-                className={cn(isClickable && "cursor-pointer")}
-                onClick={() => {
-                  if (!isClickable) return;
+            <>
+              {table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  className={cn(isClickable && "cursor-pointer")}
+                  onClick={() => {
+                    if (!isClickable) return;
 
-                  if (onClickRow) {
-                    onClickRow(row.original);
-                  } else {
-                    const id = (row.original as any)?.id;
+                    if (onClickRow) {
+                      onClickRow(row.original);
+                    } else {
+                      const id = (row.original as any)?.id;
 
-                    if (id !== undefined && id !== null) {
-                      router.push(`view/${id}`);
+                      if (id !== undefined && id !== null) {
+                        router.push(`view/${id}`);
+                      }
                     }
-                  }
-                }}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  }}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+
+              {onCreate && (
+                <TableRow>
+                  <TableCell colSpan={colSpan}>
+                    <button
+                      className="w-full flex cursor-pointer items-center justify-center gap-2 h-6"
+                      onClick={onCreate}
+                    >
+                      <Plus className="size-4" />
+                      Cadastrar
+                    </button>
                   </TableCell>
-                ))}
-              </TableRow>
-            ))
+                </TableRow>
+              )}
+            </>
           ) : (
-            <TableRow>
-              <TableCell colSpan={colSpan} className="h-24 text-center">
-                Não foram encontrados resultados.
-              </TableCell>
-            </TableRow>
+            <>
+              {onCreate && (
+                <TableRow>
+                  <TableCell colSpan={colSpan}>
+                    <button
+                      className="w-full flex cursor-pointer items-center justify-center gap-2 h-6"
+                      onClick={onCreate}
+                    >
+                      <Plus className="size-4" />
+                      Cadastrar
+                    </button>
+                  </TableCell>
+                </TableRow>
+              )}
+            </>
           )}
         </TableBody>
       </Table>
