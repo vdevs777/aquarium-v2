@@ -4,6 +4,7 @@ import {
   Building2,
   Fish,
   Settings,
+  Thermometer,
   Wheat,
 } from "lucide-react";
 import { ConfigCard } from "./components/config-card";
@@ -36,6 +37,11 @@ export function ConfigScreen() {
               icon: <Fish size={20} />,
               name: "Espécies",
               to: "/config/species/list",
+            },
+            {
+              icon: <Thermometer size={20} />,
+              name: "Temperatura",
+              to: "/config/temperature/list",
             },
           ]}
         />

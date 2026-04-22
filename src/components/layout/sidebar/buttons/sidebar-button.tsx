@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 import { useRouter } from "next/router";
@@ -25,27 +24,32 @@ export function SidebarButton({
   }
 
   return (
-    <Button
+    <button
       onClick={handleClick}
-      className={[
-        "w-full h-8 rounded-none flex justify-start gap-4 font-normal group",
-        "bg-white text-black hover:bg-primary hover:text-white",
-        isActive && "bg-primary text-white",
+      className={cn(
+        "group w-full h-8 rounded-none flex items-center justify-start gap-4 text-sm font-normal px-2  transition-all duration-75",
+        isActive ? "bg-primary text-white" : "bg-white text-black",
+        "hover:bg-primary hover:text-white",
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      )}
       {...rest}
     >
       <Icon
         strokeWidth={1.5}
         size={20}
         className={cn(
-          "group-hover:text-white",
           isActive ? "text-white" : "text-primary",
+          "group-hover:text-white",
         )}
       />
-      {text}
-    </Button>
+      <span
+        className={cn(
+          "group-hover:text-white",
+          isActive ? "text-white" : "text-black",
+        )}
+      >
+        {text}
+      </span>
+    </button>
   );
 }

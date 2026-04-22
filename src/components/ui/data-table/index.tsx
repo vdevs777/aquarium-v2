@@ -136,7 +136,7 @@ export function DataTable<TData, TValue>({
                 {error}
               </TableCell>
             </TableRow>
-          ) : table.getRowModel().rows?.length ? (
+          ) : table.getRowModel().rows.length ? (
             <>
               {table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -184,6 +184,15 @@ export function DataTable<TData, TValue>({
             </>
           ) : (
             <>
+              <TableRow>
+                <TableCell
+                  colSpan={colSpan}
+                  className="h-12 text-center text-muted-foreground"
+                >
+                  Não foram encontrados resultados
+                </TableCell>
+              </TableRow>
+
               {onCreate && (
                 <TableRow>
                   <TableCell colSpan={colSpan}>

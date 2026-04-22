@@ -20,10 +20,10 @@ export function SidebarSubButton({
 
   return (
     <Link href={fixedUrl} passHref>
-      <Button
+      <button
         {...rest}
         className={cn(
-          "relative group w-full h-8 rounded-none flex justify-start gap-4  bg-[#FAFAFA] text-primary hover:bg-zinc-200",
+          "relative group w-full transition-all duration-75 h-8 rounded-none flex justify-start gap-4 pl-11 bg-white my-0 text-sm items-center text-black hover:bg-zinc-200",
           isActive && "font-bold",
         )}
       >
@@ -39,7 +39,7 @@ export function SidebarSubButton({
             className={`absolute right-0 h-full w-1 bg-primary opacity-0 group-hover:opacity-100`}
           ></span>
         )}
-      </Button>
+      </button>
     </Link>
   );
 }

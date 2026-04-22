@@ -16,6 +16,9 @@ import { DeleteDialog } from "@/components/dialogs/delete-dialog";
 import { StrainModel } from "@/interfaces/models/Strain";
 import { toast } from "@/hooks/useToast";
 import { handleApiError } from "@/api/helpers/handle-api-error";
+import { StrainDialog } from "./strain-dialog";
+import { StrainSchema } from "@/schemas/strain-schema";
+import { Section } from "@/components/ui/section";
 
 type StrainsProps = {};
 
@@ -31,6 +34,7 @@ export function Strains({}: StrainsProps) {
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryFn: () => strainsService.getStrainsFromSpecies(Number(id)),
@@ -57,6 +61,52 @@ export function Strains({}: StrainsProps) {
     },
   });
 
+  const { mutateAsync: handleCreate, isPending: isCreating } = useMutation({
+    mutationFn: (data: StrainSchema) =>
+      strainsService.createStrainOnSpecies(Number(id), data),
+
+    onSuccess: () => {
+      setIsCreateOpen(false);
+
+      toast({
+        title: "Linhagem criada com sucesso!",
+        description: "A nova linhagem foi adicionada.",
+      });
+
+      qc.invalidateQueries({ queryKey: ["strains", Number(id)] });
+    },
+
+    onError: (error) => {
+      handleApiError(error);
+    },
+  });
+
+  const { mutateAsync: handleUpdate, isPending: isUpdating } = useMutation({
+    mutationFn: (data: StrainSchema) =>
+      strainsService.updateStrainOnSpecies(
+        Number(id),
+        itemBeingManipulated?.id!,
+        data,
+      ),
+    // RESOLVER FLICEKR
+    onSuccess: () => {
+      setIsEditOpen(false);
+
+      toast({
+        title: "Linhagem atualizada!",
+        description: `A linhagem ${itemBeingManipulated?.nome} foi atualizada.`,
+      });
+
+      setItemBeingManipulated(null);
+
+      qc.invalidateQueries({ queryKey: ["strains", Number(id)] });
+    },
+
+    onError: (error) => {
+      handleApiError(error);
+    },
+  });
+
   useLayoutEffect(() => {
     if (!isLoading) {
       setKey((prev) => prev + 1);
@@ -65,27 +115,23 @@ export function Strains({}: StrainsProps) {
 
   return (
     <>
-      <AccordionItem
-        key={`strains-${key}`} // Força recriação do componente
-        value={"strains"}
-        className="border-b px-4 last:border-b-0"
-      >
-        <AccordionTrigger>Linhagens</AccordionTrigger>
-        <AccordionContent className="space-y-4">
-          <DataTable
-            columns={columns}
-            data={data}
-            isLoading={isLoading}
-            error={error?.message}
-            onEdit={() => {}}
-            onCreate={() => {}}
-            onDelete={(data) => {
-              setItemBeingManipulated(data);
-              setIsDeleteOpen(true);
-            }}
-          />
-        </AccordionContent>
-      </AccordionItem>
+      <Section title="Linhagens">
+        <DataTable
+          columns={columns}
+          data={data}
+          isLoading={isLoading}
+          error={error?.message}
+          onEdit={(data) => {
+            setItemBeingManipulated(data);
+            setIsEditOpen(true);
+          }}
+          onCreate={() => setIsCreateOpen(true)}
+          onDelete={(data) => {
+            setItemBeingManipulated(data);
+            setIsDeleteOpen(true);
+          }}
+        />
+      </Section>
       <DeleteDialog
         title="Deletar linhagem"
         isOpen={isDeleteOpen}
@@ -93,6 +139,20 @@ export function Strains({}: StrainsProps) {
         itemLabel={itemBeingManipulated?.nome}
         onConfirm={handleDelete}
         isLoading={isDeleting}
+      />
+      <StrainDialog
+        mode="create"
+        open={isCreateOpen}
+        onOpenChange={setIsCreateOpen}
+        onSubmit={handleCreate}
+      />
+      <StrainDialog
+        mode="update"
+        open={isEditOpen}
+        onOpenChange={setIsEditOpen}
+        onSubmit={handleUpdate}
+        defaultValues={{ nome: itemBeingManipulated?.nome ?? "" }}
+        isLoading={isUpdating}
       />
     </>
   );

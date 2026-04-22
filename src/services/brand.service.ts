@@ -1,6 +1,6 @@
 import api from "@/api";
 import { BrandModel } from "@/interfaces/models/Brand";
-import { BrandSchema } from "@/schemas/fields/brand-schema";
+import { BrandSchema } from "@/schemas/brand-schema";
 
 async function create(request: BrandSchema) {
   // PROVISORY

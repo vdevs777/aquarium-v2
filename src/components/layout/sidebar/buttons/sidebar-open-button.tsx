@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, LucideIcon } from "lucide-react";
 import { useRouter } from "next/router";
+import { cn } from "@/lib/utils";
 
 interface SidebarOpenButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
@@ -16,61 +17,80 @@ export function SidebarOpenButton({
   children,
   sectionName,
   pathSplit = 2,
+  className,
   ...rest
 }: SidebarOpenButtonProps) {
   const router = useRouter();
   const path = router.pathname.split("/")[pathSplit];
-  const [isSubButtonsVisible, setSubButtonsVisible] = useState(false);
 
-  const toggleSubButtons = () => {
-    setSubButtonsVisible(!isSubButtonsVisible);
-  };
+  const [isOpen, setIsOpen] = useState(false);
+
+  const isActive = path === sectionName;
+
+  function toggle() {
+    setIsOpen((prev) => !prev);
+  }
 
   return (
     <div className="relative">
-      <Button
-        className={`w-full h-8 bg-neutral-50 rounded-none flex justify-between hover:text-white hover:bg-primary text-primary group ${
-          path === sectionName && `bg-primary hover:bg-primary`
-        }`}
-        onClick={toggleSubButtons}
+      <button
+        onClick={toggle}
+        className={cn(
+          "w-full h-8 rounded-none flex items-center justify-between font-normal group px-2 transition-all duration-75",
+          "bg-white text-black hover:bg-primary hover:text-white",
+          isActive && "bg-primary text-white",
+          className,
+        )}
         {...rest}
       >
         <div className="flex items-center gap-4">
+          <Icon
+            strokeWidth={1.5}
+            size={20}
+            className={cn(
+              "group-hover:text-white",
+              isActive ? "text-white" : "text-primary",
+            )}
+          />
+
           <span
-            className={`group-hover:text-white ${
-              path === sectionName && "text-white"
-            }`}
-          >
-            <Icon strokeWidth="1.5px" width={20} />
-          </span>
-          <span
-            className={`text-primary group-hover:text-white ${
-              path === sectionName && `text-white`
-            } ${isSubButtonsVisible ? "font-bold" : "font-normal"}`}
+            className={cn(
+              "group-hover:text-white text-sm",
+              isActive ? "text-white" : "text-black",
+              isOpen ? "font-bold" : "font-normal",
+            )}
           >
             {text}
           </span>
         </div>
-        <div className="ml-auto">
-          {!isSubButtonsVisible && (
-            <ChevronDown
-              className={`group-hover:text-white ${
-                path === sectionName ? "text-white" : "text-primary"
-              }`}
-              width={16}
-            />
-          )}
-          {isSubButtonsVisible && (
-            <ChevronUp
-              className={`group-hover:text-white ${
-                path === sectionName ? "text-white" : "text-primary"
-              }`}
-              width={16}
-            />
-          )}
-        </div>
-      </Button>
-      {isSubButtonsVisible && children}
+
+        {isOpen ? (
+          <ChevronUp
+            size={16}
+            className={cn(
+              "group-hover:text-white",
+              isActive ? "text-white" : "text-primary",
+            )}
+          />
+        ) : (
+          <ChevronDown
+            size={16}
+            className={cn(
+              "group-hover:text-white",
+              isActive ? "text-white" : "text-primary",
+            )}
+          />
+        )}
+      </button>
+
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows] duration-200 ease-in-out",
+          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        )}
+      >
+        <div className="overflow-hidden">{children}</div>
+      </div>
     </div>
   );
 }

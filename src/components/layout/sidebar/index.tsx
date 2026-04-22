@@ -9,6 +9,7 @@ import {
   RefreshCcw,
   Settings,
   Settings2,
+  Shield,
   ShieldPlus,
   User,
 } from "lucide-react";
@@ -28,13 +29,20 @@ export function Sidebar({ inDialog = false }: SidebarProps) {
   return (
     <div className={`${inDialog ? "block" : "xl:block hidden"}`}>
       <div
-        className={`max-w-[237px] min-w-[237px] min-h-[92vh] h-full white flex flex-col pt-8 ${
+        className={`max-w-[237px] min-w-[237px] min-h-[92vh] h-full white flex flex-col pt-8 gap-0w ${
           !isSidebarOpen ? "hidden" : ""
         }`}
       >
-        <section className="pt-2 px-0 w-full">
+        <section className="pt-2 px-0 w-full flex flex-col gap-0">
           <SidebarLabel text="Sistema" />
 
+          <SidebarOpenButton
+            sectionName="admin"
+            icon={Shield}
+            text="Administração"
+          >
+            <SidebarSubButton text="Usuários" url="/admin/users" />
+          </SidebarOpenButton>
           <SidebarButton icon={Settings} path="/config" text="Configurações" />
         </section>
       </div>

@@ -4,27 +4,19 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Section } from "@/components/ui/section";
 import { SpeciesSchema } from "@/schemas/species-schema";
 
 type SpeciesProps = { defaultValues: SpeciesSchema };
 
 export function Species({ defaultValues }: SpeciesProps) {
   return (
-    <AccordionItem
-      key={"specie"}
-      value={"specie"}
-      className="border-b px-4 last:border-b-0"
-    >
-      <AccordionTrigger>Espécie</AccordionTrigger>
-      <AccordionContent>
-        <div>
-          <SpeciesForm
-            defaultValues={defaultValues}
-            mode="update"
-            formBoxClassName="md:w-full p-0 pr-8 pb-4"
-          />
-        </div>
-      </AccordionContent>
-    </AccordionItem>
+    <Section title="Espécie">
+      <SpeciesForm
+        defaultValues={defaultValues}
+        mode="update"
+        formBoxClassName="md:w-full p-0 pr-8 pb-4"
+      />
+    </Section>
   );
 }
