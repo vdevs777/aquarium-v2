@@ -1,7 +1,7 @@
 import { ReactNode, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useRouter } from "next/router";
+import { cn } from "@/lib/utils";
 
 interface CollapsibleSidebarSubButtonInterface {
   text: string;
@@ -14,50 +14,59 @@ export function CollapsibleSidebarSubButton({
   children,
   subSectionName,
 }: CollapsibleSidebarSubButtonInterface) {
-  const [isSubButtonsVisible, setSubButtonsVisible] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const path = router.pathname.split("/")[3];
 
-  const toggleSubButtons = () => {
-    setSubButtonsVisible(!isSubButtonsVisible);
-  };
+  const path = router.pathname.split("/")[3];
+  const isActive = path === subSectionName;
+
+  function toggle() {
+    setIsOpen((prev) => !prev);
+  }
 
   return (
-    <>
-      <Button
-        className={`bg-primary ${
-          isSubButtonsVisible ? "font-bold" : "font-normal"
-        } relative group w-full h-8 rounded-none flex justify-start gap-4  bg-[#FAFAFA] text-slate-800 hover:bg-zinc-200`}
-        onClick={toggleSubButtons}
-      >
-        <div className="flex items-center gap-4">
-          <span
-            className={`ml-9 ${
-              path === subSectionName ? "font-bold" : "font-normal"
-            }`}
-          >
-            {text}
-          </span>
-        </div>
-        <div className="ml-auto">
-          {!isSubButtonsVisible && (
-            <ChevronDown className="text-gray-600 " width={16} />
-          )}
-          {isSubButtonsVisible && (
-            <ChevronUp className="text-gray-600 " width={16} />
-          )}
-        </div>
-        {path === subSectionName ? (
-          <span
-            className={`absolute right-0 h-full w-1 bg-primary opacity-100`}
-          ></span>
-        ) : (
-          <span
-            className={`absolute right-0 h-full w-1 bg-primary opacity-0 group-hover:opacity-100`}
-          ></span>
+    <div>
+      <button
+        onClick={toggle}
+        className={cn(
+          "relative group w-full h-8 flex items-center justify-between px-2 pl-12 text-sm transition-all duration-75",
+          "bg-white text-black",
+          "hover:bg-primary hover:text-white",
         )}
-      </Button>
-      {isSubButtonsVisible && <>{children}</>}
-    </>
+      >
+        <span
+          className={cn(
+            "group-hover:text-white text-black",
+            isActive && "font-bold",
+          )}
+        >
+          {text}
+        </span>
+
+        {isOpen ? (
+          <ChevronUp
+            size={16}
+            className={cn("text-primary", "group-hover:text-white")}
+          />
+        ) : (
+          <ChevronDown
+            size={16}
+            className={cn("text-primary", "group-hover:text-white")}
+          />
+        )}
+
+        {/* barra lateral */}
+      </button>
+
+      {/* conteúdo colapsável com animação suave */}
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows] duration-200 ease-in-out",
+          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        )}
+      >
+        <div className="overflow-hidden">{children}</div>
+      </div>
+    </div>
   );
 }

@@ -5,11 +5,21 @@ import { useRouter } from "next/router";
 
 type CreateButtonProps = {
   children?: string | ReactNode;
+  variant?:
+    | "link"
+    | "default"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "destructive"
+    | null
+    | undefined;
   onClick?: () => void;
 };
 
 export function CreateButton({
   children = "Cadastrar novo",
+  variant = "outline",
   onClick,
 }: CreateButtonProps) {
   const router = useRouter();
@@ -23,7 +33,7 @@ export function CreateButton({
   };
 
   return (
-    <Button variant="outline" onClick={onClickOrDefault}>
+    <Button variant={variant} onClick={onClickOrDefault}>
       <Plus />
       {children}
     </Button>

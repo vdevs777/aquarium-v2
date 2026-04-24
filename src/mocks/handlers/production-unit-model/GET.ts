@@ -1,6 +1,6 @@
 import { http } from "msw";
 import { withDelay } from "@/mocks/utils/with-delay";
-import { ProductionUnitModelModel } from "@/interfaces/models/ProductionUnitModelModel";
+import { ProductionUnitModelModel } from "@/interfaces/models/ProductionUnitModel";
 
 function createMockModel(id: number): ProductionUnitModelModel {
   const ehCircunferencia = Math.random() > 0.5;

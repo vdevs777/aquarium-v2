@@ -27,7 +27,7 @@ export function SidebarButton({
     <button
       onClick={handleClick}
       className={cn(
-        "group w-full h-8 rounded-none flex items-center justify-start gap-4 text-sm font-normal px-2  transition-all duration-75",
+        "group w-full h-8 rounded-none flex items-center justify-start gap-4 text-sm font-normal px-3  transition-all duration-75",
         isActive ? "bg-primary text-white" : "bg-white text-black",
         "hover:bg-primary hover:text-white",
         className,

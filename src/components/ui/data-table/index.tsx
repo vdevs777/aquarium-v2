@@ -143,6 +143,13 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className={cn(isClickable && "cursor-pointer")}
+                  style={
+                    (row.original as any)?.cor
+                      ? {
+                          borderLeft: `6px solid ${(row.original as any)?.cor}`,
+                        }
+                      : undefined
+                  }
                   onClick={() => {
                     if (!isClickable) return;
 

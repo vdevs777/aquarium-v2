@@ -36,7 +36,7 @@ export function SidebarOpenButton({
       <button
         onClick={toggle}
         className={cn(
-          "w-full h-8 rounded-none flex items-center justify-between font-normal group px-2 transition-all duration-75",
+          "w-full h-8 rounded-none flex items-center justify-between font-normal group px-3 transition-all duration-75",
           "bg-white text-black hover:bg-primary hover:text-white",
           isActive && "bg-primary text-white",
           className,

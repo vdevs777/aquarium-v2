@@ -6,11 +6,13 @@ import { cn } from "@/lib/utils";
 interface SidebarSubButtonInterface extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
   url: string;
+  insideCollapsible?: boolean;
 }
 
 export function SidebarSubButton({
   text,
   url,
+  insideCollapsible = false,
   className,
   ...rest
 }: SidebarSubButtonInterface) {
@@ -23,8 +25,9 @@ export function SidebarSubButton({
       <button
         {...rest}
         className={cn(
-          "relative group w-full transition-all duration-75 h-8 rounded-none flex justify-start gap-4 pl-11 bg-white my-0 text-sm items-center text-black hover:bg-zinc-200",
+          "relative group w-full transition-all duration-75 h-8 rounded-none flex justify-start gap-4 bg-white my-0 text-sm items-center text-black hover:bg-zinc-200",
           isActive && "font-bold",
+          insideCollapsible ? "pl-21" : "pl-12",
         )}
       >
         <span className={cn("font-normal", isActive && "font-bold", className)}>
