@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/useToast";
-import { DialogProps } from "@/interfaces/DialogProps";
+import { DialogProps } from "@/interfaces/others/DialogProps";
 import { usersService } from "@/services/users.service";
 import { useMutation } from "@tanstack/react-query";
 import { User } from "lucide-react";

@@ -1,11 +1,15 @@
 import z from "zod";
 import { errorMessages } from "@/constants/error-messages";
 
-export const numberField = (
-  max?: number,
-  isInt?: boolean,
-  allowZero: boolean = true,
-) => {
+type NumberFieldOptions = {
+  max?: number;
+  isInt?: boolean;
+  allowZero?: boolean;
+};
+
+export const numberField = (options?: NumberFieldOptions) => {
+  const { max, isInt, allowZero = true } = options || {};
+
   let schema = z
     .number({
       error: errorMessages.INVALID_VALUE,

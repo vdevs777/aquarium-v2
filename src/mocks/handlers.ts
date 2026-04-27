@@ -8,6 +8,8 @@ import { productionUnitModelHandlers } from "./handlers/production-unit-model";
 import { speciesHandlers } from "./handlers/species";
 import { temperatureHandlers } from "./handlers/temperature";
 
+import { fishFeedBatchHandlers } from "./handlers/fish-feed-batch";
+
 import { usersHandlers } from "./handlers/users";
 
 export const handlers = [
@@ -15,6 +17,9 @@ export const handlers = [
 
   // Production
   ...cultureStageHandlers,
+
+  // Feeding
+  ...fishFeedBatchHandlers,
 
   // Admin
   ...usersHandlers,

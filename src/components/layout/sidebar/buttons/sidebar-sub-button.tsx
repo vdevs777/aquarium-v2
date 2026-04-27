@@ -27,7 +27,7 @@ export function SidebarSubButton({
         className={cn(
           "relative group w-full transition-all duration-75 h-8 rounded-none flex justify-start gap-4 bg-white my-0 text-sm items-center text-black hover:bg-zinc-200",
           isActive && "font-bold",
-          insideCollapsible ? "pl-21" : "pl-12",
+          insideCollapsible ? "pl-20" : "pl-12",
         )}
       >
         <span className={cn("font-normal", isActive && "font-bold", className)}>

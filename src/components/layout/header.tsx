@@ -21,10 +21,14 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/router";
 import { useSidebarStore } from "@/stores/sidebar-store";
 import { useState } from "react";
+import { useTenant } from "@/hooks/useTenant";
 
 type HeaderProps = { showSheet: () => void };
 
 export function Header({ showSheet }: HeaderProps) {
+  const router = useRouter();
+
+  const { companies, isLoading, isReady, tenant, setTenant } = useTenant();
   const [isChangeIcon, setChangeIcon] = useState(true);
 
   const toggleSidebar = useSidebarStore((state) => state.toggleSidebar);
@@ -38,7 +42,14 @@ export function Header({ showSheet }: HeaderProps) {
     toggleSidebar();
   }
 
-  const router = useRouter();
+  if (!isReady) {
+    return (
+      <header className="w-full h-12 bg-white flex flex-row justify-between drop-shadow-sm z-50 pr-5">
+        <Skeleton className="h-5 w-28" />
+      </header>
+    );
+  }
+
   return (
     <header className="w-full h-12 bg-white flex flex-row justify-between drop-shadow-sm z-50 pr-5">
       <div className="flex flex-row items-center gap-2">
@@ -62,33 +73,7 @@ export function Header({ showSheet }: HeaderProps) {
           </button>
           <p className="font-bold xs:block hidden">Empresa</p>
         </div>
-        <div className="flex flex-row lg:ml-[105px]">
-          {/* {false ? (
-            <Skeleton className="h-5 w-28" />
-          ) : (
-            <Select
-              onValueChange={(value) => changeTenant(value)}
-              defaultValue={
-                tenant ? tenant : companies ? companies[0].id : "NULL"
-              }
-            >
-              <SelectTrigger className="p-0 border-none">
-                <SelectValue placeholder="Selecione uma empresa" />
-              </SelectTrigger>
-              <SelectContent>
-                {companies?.map((company) => (
-                  <SelectItem key={company.id} value={company.id}>
-                    {company.nome}
-                  </SelectItem>
-                )) || (
-                  <SelectItem value="NULL" disabled>
-                    Nenhuma empresa encontrada
-                  </SelectItem>
-                )}
-              </SelectContent>
-            </Select>
-          )} */}
-        </div>
+        <div className="flex flex-row lg:ml-[105px]"></div>
       </div>
       <div className="flex items-center font-normal flex-row-reverse gap-4">
         <Popover>
@@ -136,14 +121,32 @@ export function Header({ showSheet }: HeaderProps) {
             </div>
           </PopoverContent>
         </Popover>
-        <div className="flex items-center flex-row-reverse gap-4">
-          <Button
-            variant="ghost"
-            className="hover:bg-white hover:text-blue-500 p-0 text-slate-600"
+        {isLoading ? (
+          <Skeleton className="h-7 w-40" />
+        ) : (
+          <Select
+            value={tenant ?? companies?.[0].id}
+            onValueChange={(value) => {
+              setTenant(value);
+              router.push("/");
+            }}
           >
-            <Bell strokeWidth="1.5px" width={20} />
-          </Button>
-        </div>
+            <SelectTrigger className="h-7 w-40">
+              <SelectValue placeholder="Selecione uma empresa" />
+            </SelectTrigger>
+            <SelectContent>
+              {companies?.map((company) => (
+                <SelectItem key={company.id} value={company.id}>
+                  {company.nome}
+                </SelectItem>
+              )) ?? (
+                <SelectItem value="NULL" disabled>
+                  Nenhuma empresa encontrada
+                </SelectItem>
+              )}
+            </SelectContent>
+          </Select>
+        )}
       </div>
     </header>
   );

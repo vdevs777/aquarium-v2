@@ -12,6 +12,7 @@ import {
   Shield,
   ShieldPlus,
   User,
+  Wheat,
 } from "lucide-react";
 import { SidebarOpenButton } from "./buttons/sidebar-open-button";
 import { SidebarSubButton } from "./buttons/sidebar-sub-button";
@@ -37,7 +38,11 @@ export function Sidebar({ inDialog = false }: SidebarProps) {
         <section className="pt-2 px-0 w-full flex flex-col gap-0">
           <SidebarLabel text="OPERACIONAL" />
 
-          <SidebarOpenButton sectionName="admin" icon={Fish} text="Produção">
+          <SidebarOpenButton
+            sectionName="production"
+            icon={Fish}
+            text="Produção"
+          >
             <CollapsibleSidebarSubButton
               subSectionName="culture-stage"
               text="Fase de cultivo"
@@ -50,6 +55,32 @@ export function Sidebar({ inDialog = false }: SidebarProps) {
               <SidebarSubButton
                 text="Cadastrar"
                 url="/operational/production/culture-stage/create"
+                insideCollapsible
+              />
+            </CollapsibleSidebarSubButton>
+            <SidebarSubButton
+              text="Setor produtivo"
+              url="/operational/production/production-sector"
+            />
+          </SidebarOpenButton>
+
+          <SidebarOpenButton
+            sectionName="feeding"
+            icon={Wheat}
+            text="Alimentação"
+          >
+            <CollapsibleSidebarSubButton
+              subSectionName="fish-feed-batch"
+              text="Lote de ração"
+            >
+              <SidebarSubButton
+                text="Lista"
+                url="/operational/feeding/fish-feed-batch/list"
+                insideCollapsible
+              />
+              <SidebarSubButton
+                text="Cadastrar"
+                url="/operational/feeding/fish-feed-batch/create"
                 insideCollapsible
               />
             </CollapsibleSidebarSubButton>

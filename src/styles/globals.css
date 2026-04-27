@@ -2,6 +2,11 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+html body[data-scroll-locked] {
+  overflow: visible !important;
+  margin-right: 0 !important;
+}
+
 @theme {
   --font-inter: Inter, system-ui, -apple-system, sans-serif;
 }

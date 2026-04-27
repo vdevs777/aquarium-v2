@@ -23,16 +23,16 @@ export function DeleteDialog({
 }: DeleteDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="gap-4">
         <DialogTitle>{title}</DialogTitle>
         <div>
           Tem certeza que deseja deletar {article}{" "}
           {itemLabel && <span className="font-semibold">{itemLabel}</span>}?
         </div>
-        <div className="space-y-3">
+        <div className="space-x-2 flex-row flex">
           <Button
             variant="destructive"
-            className="gap-2 w-full"
+            className="gap-2 w-1/2"
             onClick={onConfirm}
             loading={isLoading}
           >
@@ -40,7 +40,7 @@ export function DeleteDialog({
           </Button>
           <Button
             variant="secondary"
-            className="w-full"
+            className="w-1/2"
             onClick={() => onOpenChange(false)}
             disabled={isLoading}
           >

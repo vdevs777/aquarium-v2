@@ -4,7 +4,7 @@ import { FormRow } from "@/components/form-row";
 import { InputController } from "@/components/controllers/input-controller";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/useToast";
-import { FormProps } from "@/interfaces/Form";
+import { FormProps } from "@/interfaces/others/Form";
 import { goToViewScreen } from "@/utils/go-to-view-screen";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

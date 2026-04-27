@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/hooks/useToast";
-import { DialogProps } from "@/interfaces/DialogProps";
+import { DialogProps } from "@/interfaces/others/DialogProps";
 import { cultureStageService } from "@/services/culture-stage.service";
 import { fishFeedService } from "@/services/fish-feed.service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

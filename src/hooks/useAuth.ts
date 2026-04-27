@@ -1,7 +1,7 @@
 import { handleApiError } from "@/api/helpers/handle-api-error";
 import { LoginSchema } from "@/schemas/login-schema";
 import { RegisterSchema } from "@/schemas/register-schema";
-import { authService } from "@/services/auth.service";
+import { accountService } from "@/services/account.service";
 import { unmask } from "@/utils/masks";
 import { setCursor } from "@/utils/set-cursor";
 import { useRouter } from "next/router";
@@ -16,7 +16,7 @@ export function useAuth() {
 
   async function login(data: LoginSchema) {
     try {
-      const token = await authService.login(data);
+      const token = await accountService.login(data);
       saveToken(token);
       router.push("/");
     } catch (error) {
@@ -32,7 +32,7 @@ export function useAuth() {
     const phone = unmaskedPhone.slice(2);
 
     try {
-      const result = await authService.register({
+      const result = await accountService.register({
         ...data,
         ddd,
         telefone: phone,
@@ -61,5 +61,7 @@ export function useAuth() {
     }
   }
 
-  return { saveToken, login, register };
+  const token = localStorage.getItem("token");
+
+  return { saveToken, login, register, token };
 }

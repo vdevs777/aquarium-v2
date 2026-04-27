@@ -5,7 +5,7 @@ import { InputController } from "@/components/controllers/input-controller";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/useToast";
-import { FormProps } from "@/interfaces/Form";
+import { FormProps } from "@/interfaces/others/Form";
 import { fishFeedSchema, FishFeedSchema } from "@/schemas/fish-feed-schema";
 import { fishFeedService } from "@/services/fish-feed.service";
 import { goToViewScreen } from "@/utils/go-to-view-screen";

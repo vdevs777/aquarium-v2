@@ -10,7 +10,7 @@ import {
   calculateVolume,
 } from "@/helpers/production-unit-model-calculations";
 import { toast } from "@/hooks/useToast";
-import { FormProps } from "@/interfaces/Form";
+import { FormProps } from "@/interfaces/others/Form";
 import {
   productionUnitModelSchema,
   ProductionUnitModelSchema,

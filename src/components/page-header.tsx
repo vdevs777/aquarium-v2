@@ -1,4 +1,4 @@
-import { TwColor } from "@/interfaces/TwColor";
+import { TwColor } from "@/interfaces/others/TwColor";
 import { LucideIcon } from "lucide-react";
 
 type PageHeaderProps = {
