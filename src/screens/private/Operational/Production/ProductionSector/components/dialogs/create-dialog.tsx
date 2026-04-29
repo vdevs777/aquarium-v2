@@ -5,12 +5,13 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/useToast";
 import { DialogProps } from "@/interfaces/others/DialogProps";
 import { productionSectorService } from "@/services/production-sector.service";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 type CreateDialogProps = DialogProps;
 
 export function CreateDialog({ open, onOpenChange }: CreateDialogProps) {
+  const queryClient = useQueryClient();
   const [name, setName] = useState("");
 
   const { mutate, isPending } = useMutation({
@@ -21,6 +22,9 @@ export function CreateDialog({ open, onOpenChange }: CreateDialogProps) {
         description: "O setor produtivo foi criado com sucesso.",
       });
       onOpenChange(false);
+      queryClient.invalidateQueries({
+        queryKey: ["production-sectors-details"],
+      });
     },
     onError: (error) => {
       handleApiError(error);

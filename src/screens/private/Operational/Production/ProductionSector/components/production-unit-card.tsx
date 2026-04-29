@@ -7,6 +7,14 @@ import { Fish, Leaf, Settings, Weight } from "lucide-react";
 import { ProductionUnitCardActions } from "./production-unit-card-actions";
 import { useState } from "react";
 import { MoveProductionUnitDialog } from "@/components/dialogs/move-production-unit-dialog";
+import { useMutation } from "@tanstack/react-query";
+import { useMoveProductionUnit } from "../mutations/useMoveProductionUnit";
+import { StockingDialog } from "@/components/dialogs/stocking-dialog";
+import { useBatchStock } from "../mutations/useBatchStock";
+import { TransferDialog } from "@/components/dialogs/transfer-dialog";
+import { useTransfer } from "../mutations/useTransfer";
+import { HarvestDialog } from "@/components/dialogs/harvest-dialog";
+import { useHarvest } from "../mutations/useHarvest";
 
 type ProductionUnitCardProps = {
   data: ProductionUnitDetailsModel;
@@ -14,6 +22,25 @@ type ProductionUnitCardProps = {
 
 export function ProductionUnitCard({ data }: ProductionUnitCardProps) {
   const [isMoveOpen, setIsMoveOpen] = useState(false);
+  const [isStockingOpen, setIsStockingOpen] = useState(false);
+  const [isTransferOpen, setIsTransferOpen] = useState(false);
+  const [isHarvestOpen, setIsHarvestOpen] = useState(false);
+
+  const { mutateAsync: moveUnit } = useMoveProductionUnit({
+    closeDialog: () => setIsMoveOpen(false),
+  });
+
+  const { mutateAsync: stock } = useBatchStock({
+    closeDialog: () => setIsStockingOpen(false),
+  });
+
+  const { mutateAsync: transfer } = useTransfer({
+    closeDialog: () => setIsTransferOpen(false),
+  });
+
+  const { mutateAsync: harvest } = useHarvest({
+    closeDialog: () => setIsHarvestOpen(false),
+  });
 
   return (
     <>
@@ -32,10 +59,10 @@ export function ProductionUnitCard({ data }: ProductionUnitCardProps) {
                 onDelete={() => {}}
                 onDetails={() => {}}
                 onEdit={() => {}}
-                onHarvest={() => {}}
+                onHarvest={() => setIsHarvestOpen(true)}
                 onMove={() => setIsMoveOpen(true)}
-                onStocking={() => {}}
-                onTransfer={() => {}}
+                onStocking={() => setIsStockingOpen(true)}
+                onTransfer={() => setIsTransferOpen(true)}
               />
             </div>
           </div>
@@ -90,7 +117,39 @@ export function ProductionUnitCard({ data }: ProductionUnitCardProps) {
       <MoveProductionUnitDialog
         open={isMoveOpen}
         onOpenChange={setIsMoveOpen}
-        onSubmit={async () => {}}
+        onSubmit={async (formData) => {
+          await moveUnit({
+            productionUnitId: data.id,
+            destinationSectorId: formData.idSetorDestino,
+            sequence: formData.sequencia,
+          });
+        }}
+      />
+      <StockingDialog
+        productionUnit={{ code: data.codigo, sequence: data.sequencia }}
+        open={isStockingOpen}
+        onOpenChange={setIsStockingOpen}
+        onSubmit={async (formData) => {
+          await stock({ ...formData, unidadeProdutivaId: data.id });
+        }}
+      />
+      <TransferDialog
+        open={isTransferOpen}
+        onOpenChange={setIsTransferOpen}
+        productionUnit={{ code: data.codigo, sequence: data.sequencia }}
+        fishAmount={data.numeroPeixes ?? 0}
+        onSubmit={async (formData) => {
+          await transfer({ ...formData, unidadeProdutivaOrigemId: data.id });
+        }}
+      />
+      <HarvestDialog
+        open={isHarvestOpen}
+        onOpenChange={setIsHarvestOpen}
+        productionUnit={{ code: data.codigo, sequence: data.sequencia }}
+        fishAmount={data.numeroPeixes ?? 0}
+        onSubmit={async (formData) => {
+          await harvest({ ...formData, unidadeProdutivaId: data.id });
+        }}
       />
     </>
   );

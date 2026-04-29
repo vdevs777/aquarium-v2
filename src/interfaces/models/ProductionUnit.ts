@@ -17,7 +17,7 @@ export interface ProductionUnitModel {
 
 export interface ProductionUnitDetailsModel {
   id: number;
-  codigo: number;
+  codigo: string;
   sequencia: number;
   numeroPeixes: number;
   fatorConversaoAlimentar: number;

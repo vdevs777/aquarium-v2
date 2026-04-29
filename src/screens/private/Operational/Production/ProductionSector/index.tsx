@@ -8,14 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 import { productionSectorService } from "@/services/production-sector.service";
 import { Spinner } from "@/components/ui/spinner";
 import { ProductionUnitCard } from "./components/production-unit-card";
+import { useGetProductionSectors } from "./queries/useGetProductionSectors";
 
 export function ProductionSectorScreen() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  const { data = [], isLoading } = useQuery({
-    queryKey: ["production-sectors-details"],
-    queryFn: productionSectorService.getAllWithUnitsDetails,
-  });
+  const { productionSectors, isLoading } = useGetProductionSectors();
 
   return (
     <>
@@ -34,8 +32,8 @@ export function ProductionSectorScreen() {
             <div className="w-full flex justify-center pt-6">
               <Spinner className="size-8" />
             </div>
-          ) : data?.length > 0 ? (
-            data.map((sector) => (
+          ) : productionSectors?.length > 0 ? (
+            productionSectors.map((sector) => (
               <ProductionSectorBox
                 key={sector.id}
                 id={sector.id}
@@ -43,7 +41,7 @@ export function ProductionSectorScreen() {
               >
                 <div className="grid grid-cols-4 gap-3">
                   {sector.unidades.map((unit) => (
-                    <ProductionUnitCard data={unit} />
+                    <ProductionUnitCard data={unit} key={unit.id} />
                   ))}
                 </div>
               </ProductionSectorBox>

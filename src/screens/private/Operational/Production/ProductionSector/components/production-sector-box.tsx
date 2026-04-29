@@ -5,6 +5,8 @@ import { useToast } from "@/hooks/useToast";
 import { DeleteDialog } from "@/components/dialogs/delete-dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { productionSectorService } from "@/services/production-sector.service";
+import { useUpdateProductionSector } from "../mutations/useUpdateProductionSector";
+import { useDeleteProductionSector } from "../mutations/useDeleteProductionSector";
 
 type ProductionSectorBoxProps = {
   id: number;
@@ -17,9 +19,6 @@ export function ProductionSectorBox({
   name,
   children,
 }: ProductionSectorBoxProps) {
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-
   const [currentName, setCurrentName] = useState(name);
   const [draftName, setDraftName] = useState(name);
 
@@ -32,97 +31,8 @@ export function ProductionSectorBox({
     setDraftName(name);
   }, [name]);
 
-  // ✅ UPDATE MUTATION
-  const { mutateAsync: updateSector } = useMutation({
-    mutationFn: (data: { id: number; nome: string }) =>
-      productionSectorService.update(data.id, data.nome),
-
-    onMutate: async (variables) => {
-      await queryClient.cancelQueries({
-        queryKey: ["production-sectors-details"],
-      });
-
-      const previousData = queryClient.getQueryData<any[]>([
-        "production-sectors-details",
-      ]);
-
-      queryClient.setQueryData(
-        ["production-sectors-details"],
-        (old: any[] = []) =>
-          old.map((sector) =>
-            sector.id === variables.id
-              ? { ...sector, nome: variables.nome }
-              : sector,
-          ),
-      );
-
-      return { previousData };
-    },
-
-    onError: (_err, _variables, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(
-          ["production-sectors-details"],
-          context.previousData,
-        );
-      }
-
-      toast({
-        title: "Erro ao atualizar setor",
-        description: "Não foi possível atualizar.",
-        variant: "destructive",
-      });
-    },
-
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["production-sectors-details"],
-      });
-    },
-  });
-
-  // ✅ DELETE MUTATION (NOVO)
-  const { mutateAsync: deleteSector } = useMutation({
-    mutationFn: (id: number) => productionSectorService.delete(id),
-
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({
-        queryKey: ["production-sectors-details"],
-      });
-
-      const previousData = queryClient.getQueryData<any[]>([
-        "production-sectors-details",
-      ]);
-
-      queryClient.setQueryData(
-        ["production-sectors-details"],
-        (old: any[] = []) => old.filter((sector) => sector.id !== id),
-      );
-
-      return { previousData };
-    },
-
-    onError: (_err, _id, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(
-          ["production-sectors-details"],
-          context.previousData,
-        );
-      }
-
-      toast({
-        title: "Erro ao deletar setor",
-        description: "Não foi possível deletar.",
-        variant: "destructive",
-      });
-    },
-
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["production-sectors-details"],
-      });
-    },
-  });
+  const { mutateAsync: updateSector } = useUpdateProductionSector();
+  const { mutateAsync: deleteSector } = useDeleteProductionSector();
 
   const handleSave = async () => {
     const previous = currentName;

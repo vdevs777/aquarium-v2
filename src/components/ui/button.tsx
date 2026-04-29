@@ -70,7 +70,7 @@ function Button({
     >
       {loading ? (
         <div className="w-24 flex items-center justify-center">
-          <Spinner />
+          <Spinner className="text-white" />
         </div>
       ) : (
         children

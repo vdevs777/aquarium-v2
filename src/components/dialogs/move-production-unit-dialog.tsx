@@ -13,6 +13,7 @@ import { productionSectorService } from "@/services/production-sector.service";
 import { InputController } from "../controllers/input-controller";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
+import { useEffect } from "react";
 
 type MoveProductionUnitDialogProps = DialogProps & {
   onSubmit: (data: MoveProductionUnitSchema) => Promise<void>;
@@ -26,6 +27,7 @@ export function MoveProductionUnitDialog({
   const {
     control,
     handleSubmit,
+    reset,
     formState: { isSubmitting },
   } = useForm<MoveProductionUnitSchema>({
     resolver: zodResolver(moveProductionUnitSchema),
@@ -36,6 +38,10 @@ export function MoveProductionUnitDialog({
       queryKey: ["production-sectors"],
       queryFn: productionSectorService.getAll,
     });
+
+  useEffect(() => {
+    if (!open) reset();
+  }, [open]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
