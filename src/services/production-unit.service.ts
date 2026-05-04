@@ -1,12 +1,30 @@
 import api from "@/api";
 
+import {
+  ProductionUnitDetailsModel,
+  ProductionUnitModel,
+} from "@/interfaces/models/ProductionUnit";
+
+import { IdBodyResponse } from "@/interfaces/http/IdBodyResponse";
 import { MoveProductionUnitParams } from "@/interfaces/http/ProductionUnit/MoveProductionUnitParams";
-import { ProductionUnitModel } from "@/interfaces/models/ProductionUnit";
+
+import { ProductionUnitStatus } from "@/interfaces/enums/ProductionUnitStatus";
+
+import { ProductionUnitCreateSchema } from "@/schemas/production-unit-schema";
+import { ProductionUnitAllocationSummary } from "@/interfaces/http/ProductionUnit/ProductionUnitAllocationSummary";
+import { ProductionUnitHistoryItem } from "@/interfaces/http/ProductionUnit/ProductionUnitHistoryItem";
 
 export const productionUnitService = {
   async getAll() {
     const { data } =
       await api.get<ProductionUnitModel[]>(`/unidades-produtivas`);
+    return data;
+  },
+
+  async getByIdDetails(id: number) {
+    const { data } = await api.get<ProductionUnitDetailsModel>(
+      `/unidades-produtivas/${id}/detalhes`,
+    );
     return data;
   },
 
@@ -19,5 +37,37 @@ export const productionUnitService = {
       `/unidades-produtivas/${productionUnitId}/mover/${destinationSectorId}`,
       { sequencia: sequence },
     );
+  },
+
+  async create(request: ProductionUnitCreateSchema) {
+    const payload: ProductionUnitModel = {
+      ...request,
+      id: 0,
+      statusId: ProductionUnitStatus.Active,
+      setorProdutivoNome: "",
+      modeloUnidadeProdutivaNome: "",
+      codigoAlimentador: null,
+    };
+
+    const { data } = await api.post<IdBodyResponse>(
+      "/unidades-produtivas",
+      payload,
+    );
+
+    return data;
+  },
+
+  async getSummaryAllocationsById(id: number) {
+    const { data } = await api.get<ProductionUnitAllocationSummary[]>(
+      `/unidades-produtivas/${id}/alocacoes-resumidas`,
+    );
+    return data;
+  },
+
+  async getHistoryById(id: number) {
+    const { data } = await api.get<ProductionUnitHistoryItem[]>(
+      `/unidades-produtivas/${id}/historico`,
+    );
+    return data;
   },
 };

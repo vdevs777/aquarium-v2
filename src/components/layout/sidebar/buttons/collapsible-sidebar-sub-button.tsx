@@ -29,30 +29,19 @@ export function CollapsibleSidebarSubButton({
       <button
         onClick={toggle}
         className={cn(
-          "relative group w-full h-8 flex items-center justify-between px-2 pl-12 text-sm transition-all duration-75",
-          "bg-white text-black",
-          "hover:bg-primary hover:text-white",
+          "relative group text-black w-full h-8 flex items-center justify-between px-3 pl-12 text-sm transition-all duration-75",
+          "bg-white",
+          "hover:bg-zinc-200",
         )}
       >
-        <span
-          className={cn(
-            "group-hover:text-white text-black",
-            isActive && "font-bold",
-          )}
-        >
+        <span className={cn(" text-black", isActive && "font-bold")}>
           {text}
         </span>
 
         {isOpen ? (
-          <ChevronUp
-            size={16}
-            className={cn("text-primary", "group-hover:text-white")}
-          />
+          <ChevronUp size={16} className={cn("text-primary")} />
         ) : (
-          <ChevronDown
-            size={16}
-            className={cn("text-primary", "group-hover:text-white")}
-          />
+          <ChevronDown size={16} className={cn("text-primary")} />
         )}
 
         {/* barra lateral */}

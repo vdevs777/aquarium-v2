@@ -19,12 +19,14 @@ import { customerService } from "@/services/customer.service";
 type HarvestDialogProps = DialogProps & {
   productionUnit: { code: string; sequence: number };
   onSubmit: (data: HarvestSchema) => Promise<void>;
+  defaultValues?: Partial<HarvestSchema>;
   fishAmount: number;
 };
 
 export function HarvestDialog({
   productionUnit: { code, sequence },
   onSubmit,
+  defaultValues,
   fishAmount,
   ...rest
 }: HarvestDialogProps) {
@@ -40,7 +42,10 @@ export function HarvestDialog({
     formState: { isSubmitting, errors },
   } = useForm<HarvestSchema>({
     resolver: zodResolver(harvestSchema),
-    defaultValues: { enviarUnidadeProdutivaParaManutencao: false },
+    defaultValues: {
+      enviarUnidadeProdutivaParaManutencao: false,
+      ...defaultValues,
+    },
   });
 
   const enviarUnidadeProdutivaParaManutencao = watch(

@@ -57,7 +57,7 @@ function SelectTrigger({
         "cursor-pointer flex w-full items-center justify-between gap-1.5 rounded-md border border-input bg-transparent px-2.5 py-1 text-sm shadow-xs outline-none transition-[color,box-shadow]",
         "text-black",
         "focus:border-primary focus:ring-4 ring-primary/10",
-        "data-[placeholder]:text-muted-foreground",
+        "data-placeholder:text-muted-foreground",
         "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
         hasError &&
           "border-destructive focus:border-destructive focus:ring-destructive/20",

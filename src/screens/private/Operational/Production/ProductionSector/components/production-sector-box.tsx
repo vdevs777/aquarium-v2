@@ -5,8 +5,8 @@ import { useToast } from "@/hooks/useToast";
 import { DeleteDialog } from "@/components/dialogs/delete-dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { productionSectorService } from "@/services/production-sector.service";
-import { useUpdateProductionSector } from "../mutations/useUpdateProductionSector";
-import { useDeleteProductionSector } from "../mutations/useDeleteProductionSector";
+import { useUpdateProductionSector } from "../../../../../../queries/useUpdateProductionSector";
+import { useDeleteProductionSector } from "../../../../../../queries/useDeleteProductionSector";
 
 type ProductionSectorBoxProps = {
   id: number;

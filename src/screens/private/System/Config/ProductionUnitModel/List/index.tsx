@@ -11,7 +11,7 @@ import { PopulateButton } from "@/components/buttons/populate-button";
 export function ProductionUnitModelListScreen() {
   const { data, isLoading, error } = useQuery({
     queryFn: () => productionUnitModelService.getAll(),
-    queryKey: ["production-unit-model"],
+    queryKey: ["production-unit-models"],
   });
 
   return (

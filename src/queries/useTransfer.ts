@@ -1,21 +1,25 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, QueryKey } from "@tanstack/react-query";
 import { batchTransferService } from "@/services/batch-transfer.service";
 import { toast } from "@/hooks/useToast";
 import { handleApiError } from "@/api/helpers/handle-api-error";
 
 interface UseTransferProps {
   closeDialog: () => void;
+  invalidateQueryKeys?: QueryKey[];
 }
 
-export function useTransfer({ closeDialog }: UseTransferProps) {
+export function useTransfer({
+  closeDialog,
+  invalidateQueryKeys = [],
+}: UseTransferProps) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: batchTransferService.transfer,
 
     onSuccess: () => {
-      queryClient.refetchQueries({
-        queryKey: ["production-sectors-details"],
+      invalidateQueryKeys.forEach((queryKey) => {
+        queryClient.invalidateQueries({ queryKey });
       });
 
       toast({

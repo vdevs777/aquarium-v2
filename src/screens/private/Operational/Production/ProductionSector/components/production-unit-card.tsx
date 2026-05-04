@@ -8,13 +8,13 @@ import { ProductionUnitCardActions } from "./production-unit-card-actions";
 import { useState } from "react";
 import { MoveProductionUnitDialog } from "@/components/dialogs/move-production-unit-dialog";
 import { useMutation } from "@tanstack/react-query";
-import { useMoveProductionUnit } from "../mutations/useMoveProductionUnit";
+import { useMoveProductionUnit } from "../../../../../../queries/useMoveProductionUnit";
 import { StockingDialog } from "@/components/dialogs/stocking-dialog";
-import { useBatchStock } from "../mutations/useBatchStock";
+import { useBatchStock } from "../../../../../../queries/useBatchStock";
 import { TransferDialog } from "@/components/dialogs/transfer-dialog";
-import { useTransfer } from "../mutations/useTransfer";
+import { useTransfer } from "../../../../../../queries/useTransfer";
 import { HarvestDialog } from "@/components/dialogs/harvest-dialog";
-import { useHarvest } from "../mutations/useHarvest";
+import { useHarvest } from "../../../../../../queries/useHarvest";
 
 type ProductionUnitCardProps = {
   data: ProductionUnitDetailsModel;
@@ -53,7 +53,7 @@ export function ProductionUnitCard({ data }: ProductionUnitCardProps) {
 
             <div className="flex flex-row gap-2">
               <Badge className="bg-green-100 text-green-700 border-none">
-                {capitalize(data.status)}
+                {data.status}
               </Badge>
               <ProductionUnitCardActions
                 onDelete={() => {}}

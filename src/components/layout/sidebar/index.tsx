@@ -31,7 +31,7 @@ export function Sidebar({ inDialog = false }: SidebarProps) {
   return (
     <div className={`${inDialog ? "block" : "xl:block hidden"}`}>
       <div
-        className={`max-w-[237px] min-w-[237px] min-h-[92vh] h-full white flex gap-4 flex-col pt-8 gap-0w ${
+        className={`max-w-59.25 min-w-59.25 min-h-[92vh] h-full white flex gap-4 flex-col pt-8 gap-0w ${
           !isSidebarOpen ? "hidden" : ""
         }`}
       >
@@ -43,6 +43,22 @@ export function Sidebar({ inDialog = false }: SidebarProps) {
             icon={Fish}
             text="Produção"
           >
+            <CollapsibleSidebarSubButton
+              subSectionName="production-unit"
+              text="Unidade produtiva"
+            >
+              <SidebarSubButton
+                text="Cadastrar"
+                url="/operational/production/production-unit/create"
+                insideCollapsible
+              />
+              <SidebarSubButton
+                text="Análise"
+                url="/operational/production/production-unit/analysis"
+                insideCollapsible
+              />
+            </CollapsibleSidebarSubButton>
+
             <CollapsibleSidebarSubButton
               subSectionName="culture-stage"
               text="Fase de cultivo"

@@ -6,39 +6,48 @@ import { handleApiError } from "@/api/helpers/handle-api-error";
 
 interface UseMoveProductionUnitProps {
   closeDialog: () => void;
+  queryKeys?: unknown[][];
 }
+
+type MoveVariables = {
+  productionUnitId: number;
+  destinationSectorId: number;
+  sequence: number;
+};
 
 export function useMoveProductionUnit({
   closeDialog,
+  queryKeys = [["production-sectors-details"]],
 }: UseMoveProductionUnitProps) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: productionUnitService.move,
 
-    onMutate: async (variables) => {
-      await queryClient.cancelQueries({
-        queryKey: ["production-sectors-details"],
-      });
+    onMutate: async (variables: MoveVariables) => {
+      await Promise.all(
+        queryKeys.map((queryKey) => queryClient.cancelQueries({ queryKey })),
+      );
 
       const previousData = queryClient.getQueryData<
         ProductionSectorModelWithProductionUnits<ProductionUnitDetailsModel>[]
-      >(["production-sectors-details"]);
+      >(queryKeys[0]);
 
       queryClient.setQueryData(
-        ["production-sectors-details"],
+        queryKeys[0],
         (
           old: ProductionSectorModelWithProductionUnits<ProductionUnitDetailsModel>[] = [],
         ) => {
-          let movedUnit: any = null;
+          let movedUnit: ProductionUnitDetailsModel | null = null;
 
-          const updated = old.map((sector) => {
+          const withoutOrigin = old.map((sector) => {
             const unit = sector.unidades.find(
               (u) => u.id === variables.productionUnitId,
             );
 
             if (unit) {
               movedUnit = { ...unit, sequencia: variables.sequence };
+
               return {
                 ...sector,
                 unidades: sector.unidades.filter(
@@ -50,9 +59,11 @@ export function useMoveProductionUnit({
             return sector;
           });
 
-          return updated.map((sector) => {
+          return withoutOrigin.map((sector) => {
             if (sector.id === variables.destinationSectorId && movedUnit) {
-              const exists = sector.unidades.some((u) => u.id === movedUnit.id);
+              const exists = sector.unidades.some(
+                (u) => u.id === movedUnit!.id,
+              );
 
               if (exists) return sector;
 
@@ -70,22 +81,21 @@ export function useMoveProductionUnit({
       return { previousData };
     },
 
-    onSuccess: () => closeDialog(),
+    onSuccess: () => {
+      closeDialog();
+    },
 
     onError: (err, _vars, context) => {
       if (context?.previousData) {
-        queryClient.setQueryData(
-          ["production-sectors-details"],
-          context.previousData,
-        );
+        queryClient.setQueryData(queryKeys[0], context.previousData);
       }
 
       handleApiError(err);
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["production-sectors-details"],
+      queryKeys.forEach((queryKey) => {
+        queryClient.invalidateQueries({ queryKey });
       });
     },
   });

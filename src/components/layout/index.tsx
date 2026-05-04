@@ -17,7 +17,7 @@ export function Layout({ children }: PropsWithChildren) {
         <Sidebar />
         <Sheet open={isShowSheet} onOpenChange={setIsShowSheet}>
           <SheetTrigger asChild></SheetTrigger>
-          <SheetContent side="left" className="mt-12 p-0 w-[236px] h-full">
+          <SheetContent side="left" className="mt-12 p-0 w-59 h-full">
             <Sidebar inDialog />
           </SheetContent>
         </Sheet>

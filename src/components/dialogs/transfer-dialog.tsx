@@ -21,12 +21,14 @@ type TransferDialogProps = DialogProps & {
   productionUnit: { code: string; sequence: number };
   onSubmit: (data: TransferSchema) => Promise<void>;
   fishAmount: number;
+  defaultValues?: Partial<TransferSchema>;
 };
 
 export function TransferDialog({
   productionUnit: { code, sequence },
   onSubmit,
   fishAmount,
+  defaultValues,
   ...rest
 }: TransferDialogProps) {
   const {
@@ -36,6 +38,7 @@ export function TransferDialog({
     formState: { isSubmitting, errors },
   } = useForm<TransferSchema>({
     resolver: zodResolver(transferSchema),
+    defaultValues,
   });
 
   const { data: productionUnits, isLoading: loadingProductionUnits } = useQuery(

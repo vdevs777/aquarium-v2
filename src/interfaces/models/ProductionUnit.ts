@@ -10,7 +10,7 @@ export interface ProductionUnitModel {
   modeloUnidadeProdutivaNome: string;
   setorProdutivoId?: number;
   setorProdutivoNome: string;
-  statusId: ProductionUnitStatus;
+  statusId: ProductionUnitStatus | null;
   codigoAlimentador: string | null;
   tipoAlimentacaoId: FeedingType;
 }

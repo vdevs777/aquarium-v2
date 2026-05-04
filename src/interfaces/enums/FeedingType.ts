@@ -25,3 +25,13 @@ export function getFeedingTypeId(value: string) {
   );
   return entry ? Number(entry[0]) : null;
 }
+
+export function getFeedingTypeOptions(): {
+  label: string;
+  value: string;
+}[] {
+  return Object.entries(statusUnidadeLabels).map(([value, label]) => ({
+    label,
+    value: String(value),
+  }));
+}

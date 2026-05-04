@@ -18,11 +18,13 @@ import { PackagePlus } from "lucide-react";
 type StockingDialogProps = DialogProps & {
   productionUnit: { code: string; sequence: number };
   onSubmit: (data: StockingSchema) => Promise<void>;
+  defaultValues?: Partial<StockingSchema>;
 };
 
 export function StockingDialog({
   productionUnit: { code, sequence },
   onSubmit,
+  defaultValues,
   ...rest
 }: StockingDialogProps) {
   const [isTotalStocking, setIsTotalStocking] = useState(false);
@@ -37,6 +39,7 @@ export function StockingDialog({
     formState: { isSubmitting, errors },
   } = useForm<StockingSchema>({
     resolver: zodResolver(stockingSchema),
+    defaultValues,
   });
 
   const { data: fishBatches, isLoading: loadingFishBatches } = useQuery({
