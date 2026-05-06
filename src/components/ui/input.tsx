@@ -2,10 +2,12 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Eye, EyeOff, LucideIcon } from "lucide-react";
 
+type Decorator = LucideIcon | string;
+
 export interface InputProps extends React.ComponentProps<"input"> {
   error?: string;
   secureTextEntry?: boolean;
-  leftIcon?: LucideIcon;
+  leftDecorator?: Decorator;
   rightIcon?: LucideIcon;
 }
 
@@ -16,7 +18,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       type,
       error,
       secureTextEntry,
-      leftIcon: LeftIcon,
+      leftDecorator,
       rightIcon: RightIcon,
       ...props
     },
@@ -30,11 +32,22 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const hasRightElement = isPassword || RightIcon;
 
+    const renderLeftDecorator = () => {
+      if (!leftDecorator) return null;
+
+      if (typeof leftDecorator === "string") {
+        return <span className="text-sm">{leftDecorator}</span>;
+      }
+
+      const Icon = leftDecorator;
+      return <Icon size={18} />;
+    };
+
     return (
       <div className="relative w-full">
-        {LeftIcon && (
-          <span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground">
-            <LeftIcon size={18} />
+        {leftDecorator && (
+          <span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground flex items-center">
+            {renderLeftDecorator()}
           </span>
         )}
 
@@ -51,8 +64,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               "border-destructive focus:border-destructive focus:ring-destructive/20",
             "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
 
-            // padding dinâmico
-            LeftIcon ? "pl-9" : "pl-2.5",
+            leftDecorator ? "pl-9" : "pl-2.5",
             hasRightElement ? "pr-10" : "pr-2.5",
 
             className,
@@ -60,14 +72,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
 
-        {/* Right icon (custom) */}
         {RightIcon && !isPassword && (
           <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground">
             <RightIcon size={18} />
           </span>
         )}
 
-        {/* Password toggle */}
         {isPassword && (
           <button
             type="button"

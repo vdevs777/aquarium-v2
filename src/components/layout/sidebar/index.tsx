@@ -86,6 +86,21 @@ export function Sidebar({ inDialog = false }: SidebarProps) {
             text="Alimentação"
           >
             <CollapsibleSidebarSubButton
+              subSectionName="fish-batch"
+              text="Lote de produção"
+            >
+              <SidebarSubButton
+                text="Lista"
+                url="/operational/feeding/fish-batch/list"
+                insideCollapsible
+              />
+              <SidebarSubButton
+                text="Cadastrar"
+                url="/operational/feeding/fish-batch/create"
+                insideCollapsible
+              />
+            </CollapsibleSidebarSubButton>
+            <CollapsibleSidebarSubButton
               subSectionName="fish-feed-batch"
               text="Lote de ração"
             >
