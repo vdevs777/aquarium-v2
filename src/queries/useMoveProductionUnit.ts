@@ -6,7 +6,7 @@ import { handleApiError } from "@/api/helpers/handle-api-error";
 
 interface UseMoveProductionUnitProps {
   closeDialog: () => void;
-  queryKeys?: unknown[][];
+  refetch?: () => Promise<void> | void;
 }
 
 type MoveVariables = {
@@ -17,7 +17,7 @@ type MoveVariables = {
 
 export function useMoveProductionUnit({
   closeDialog,
-  queryKeys = [["production-sectors-details"]],
+  refetch,
 }: UseMoveProductionUnitProps) {
   const queryClient = useQueryClient();
 
@@ -25,16 +25,17 @@ export function useMoveProductionUnit({
     mutationFn: productionUnitService.move,
 
     onMutate: async (variables: MoveVariables) => {
-      await Promise.all(
-        queryKeys.map((queryKey) => queryClient.cancelQueries({ queryKey })),
-      );
+      const queryKey = ["production-sectors-details"];
 
-      const previousData = queryClient.getQueryData<
-        ProductionSectorModelWithProductionUnits<ProductionUnitDetailsModel>[]
-      >(queryKeys[0]);
+      await queryClient.cancelQueries({ queryKey });
+
+      const previousData =
+        queryClient.getQueryData<
+          ProductionSectorModelWithProductionUnits<ProductionUnitDetailsModel>[]
+        >(queryKey);
 
       queryClient.setQueryData(
-        queryKeys[0],
+        queryKey,
         (
           old: ProductionSectorModelWithProductionUnits<ProductionUnitDetailsModel>[] = [],
         ) => {
@@ -78,7 +79,7 @@ export function useMoveProductionUnit({
         },
       );
 
-      return { previousData };
+      return { previousData, queryKey };
     },
 
     onSuccess: () => {
@@ -86,17 +87,17 @@ export function useMoveProductionUnit({
     },
 
     onError: (err, _vars, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(queryKeys[0], context.previousData);
+      if (context?.previousData && context?.queryKey) {
+        queryClient.setQueryData(context.queryKey, context.previousData);
       }
 
       handleApiError(err);
     },
 
-    onSettled: () => {
-      queryKeys.forEach((queryKey) => {
-        queryClient.invalidateQueries({ queryKey });
-      });
+    onSettled: async () => {
+      if (refetch) {
+        await refetch();
+      }
     },
   });
 }

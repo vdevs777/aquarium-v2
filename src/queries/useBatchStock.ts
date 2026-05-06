@@ -1,26 +1,21 @@
-import { QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { batchTransferService } from "@/services/batch-transfer.service";
 import { toast } from "@/hooks/useToast";
 import { handleApiError } from "@/api/helpers/handle-api-error";
 
 interface UseBatchStockProps {
   closeDialog: () => void;
-  invalidateQueryKeys?: QueryKey[];
+  refetch?: () => Promise<void> | void;
 }
 
-export function useBatchStock({
-  closeDialog,
-  invalidateQueryKeys = [["production-sectors-details"]],
-}: UseBatchStockProps) {
-  const queryClient = useQueryClient();
-
+export function useBatchStock({ closeDialog, refetch }: UseBatchStockProps) {
   return useMutation({
     mutationFn: batchTransferService.stock,
 
-    onSuccess: () => {
-      invalidateQueryKeys.forEach((queryKey) => {
-        queryClient.invalidateQueries({ queryKey });
-      });
+    onSuccess: async () => {
+      if (refetch) {
+        await refetch();
+      }
 
       toast({
         title: "Povoamento bem-sucedido!",

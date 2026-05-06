@@ -15,32 +15,70 @@ import { TransferDialog } from "@/components/dialogs/transfer-dialog";
 import { useTransfer } from "../../../../../../queries/useTransfer";
 import { HarvestDialog } from "@/components/dialogs/harvest-dialog";
 import { useHarvest } from "../../../../../../queries/useHarvest";
+import { ProductionUnitEditRequest } from "@/interfaces/http/ProductionUnit/ProductionUnitEditRequest";
+import { productionUnitService } from "@/services/production-unit.service";
+import { toast } from "@/hooks/useToast";
+import { handleApiError } from "@/api/helpers/handle-api-error";
+import { EditProductionUnitDialog } from "@/components/dialogs/edit-production-unit-dialog";
+import { FeedingType, getFeedingTypeId } from "@/interfaces/enums/FeedingType";
+import { useRouter } from "next/router";
 
 type ProductionUnitCardProps = {
   data: ProductionUnitDetailsModel;
+  refetch: () => Promise<void>;
 };
 
-export function ProductionUnitCard({ data }: ProductionUnitCardProps) {
+export function ProductionUnitCard({ data, refetch }: ProductionUnitCardProps) {
+  const router = useRouter();
+
   const [isMoveOpen, setIsMoveOpen] = useState(false);
   const [isStockingOpen, setIsStockingOpen] = useState(false);
   const [isTransferOpen, setIsTransferOpen] = useState(false);
   const [isHarvestOpen, setIsHarvestOpen] = useState(false);
 
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
   const { mutateAsync: moveUnit } = useMoveProductionUnit({
     closeDialog: () => setIsMoveOpen(false),
+    refetch,
   });
 
   const { mutateAsync: stock } = useBatchStock({
     closeDialog: () => setIsStockingOpen(false),
+    refetch,
   });
 
   const { mutateAsync: transfer } = useTransfer({
     closeDialog: () => setIsTransferOpen(false),
+    refetch,
   });
 
   const { mutateAsync: harvest } = useHarvest({
     closeDialog: () => setIsHarvestOpen(false),
+    refetch,
   });
+
+  async function editUnit(data: ProductionUnitEditRequest) {
+    try {
+      setIsEditing(true);
+
+      await productionUnitService.edit(data.id, data);
+
+      await refetch();
+
+      setIsEditOpen(false);
+
+      toast({
+        title: "Edição bem-sucedida!",
+        description: "A unidade produtiva foi editada com sucesso.",
+      });
+    } catch (error) {
+      handleApiError(error);
+    } finally {
+      setIsEditing(false);
+    }
+  }
 
   return (
     <>
@@ -57,8 +95,12 @@ export function ProductionUnitCard({ data }: ProductionUnitCardProps) {
               </Badge>
               <ProductionUnitCardActions
                 onDelete={() => {}}
-                onDetails={() => {}}
-                onEdit={() => {}}
+                onDetails={() =>
+                  router.push(
+                    `/operational/production/production-unit/analysis?id=${data.id}`,
+                  )
+                }
+                onEdit={() => setIsEditOpen(true)}
                 onHarvest={() => setIsHarvestOpen(true)}
                 onMove={() => setIsMoveOpen(true)}
                 onStocking={() => setIsStockingOpen(true)}
@@ -150,6 +192,40 @@ export function ProductionUnitCard({ data }: ProductionUnitCardProps) {
         onSubmit={async (formData) => {
           await harvest({ ...formData, unidadeProdutivaId: data.id });
         }}
+      />
+      <EditProductionUnitDialog
+        key={
+          data.id +
+          "-" +
+          data.sequencia +
+          "-" +
+          data.codigo +
+          "-" +
+          data.idModeloUnidadeProdutiva +
+          "-" +
+          data.tipoAlimentacaoId
+        }
+        open={isEditOpen}
+        onOpenChange={setIsEditOpen}
+        defaultValues={{
+          codigo: data.codigo,
+          modeloUnidadeProdutivaId: data.idModeloUnidadeProdutiva,
+          sequencia: data.sequencia,
+          tipoAlimentacaoId: getFeedingTypeId(
+            data.tipoAlimentacao,
+          ) as FeedingType,
+        }}
+        onSubmit={async (formData) =>
+          await editUnit({
+            id: data.id!,
+            modeloUnidadeProdutivaId: formData.modeloUnidadeProdutivaId,
+            codigo: formData.codigo,
+            codigoAlimentador: data.codigoAlimentador,
+            sequencia: formData.sequencia,
+            setorProdutivoId: data.idSetorProdutivo,
+            tipoAlimentacaoId: formData.tipoAlimentacaoId,
+          })
+        }
       />
     </>
   );

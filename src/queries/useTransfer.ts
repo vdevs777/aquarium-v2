@@ -1,26 +1,21 @@
-import { useMutation, useQueryClient, QueryKey } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { batchTransferService } from "@/services/batch-transfer.service";
 import { toast } from "@/hooks/useToast";
 import { handleApiError } from "@/api/helpers/handle-api-error";
 
 interface UseTransferProps {
   closeDialog: () => void;
-  invalidateQueryKeys?: QueryKey[];
+  refetch?: () => Promise<void> | void;
 }
 
-export function useTransfer({
-  closeDialog,
-  invalidateQueryKeys = [],
-}: UseTransferProps) {
-  const queryClient = useQueryClient();
-
+export function useTransfer({ closeDialog, refetch }: UseTransferProps) {
   return useMutation({
     mutationFn: batchTransferService.transfer,
 
-    onSuccess: () => {
-      invalidateQueryKeys.forEach((queryKey) => {
-        queryClient.invalidateQueries({ queryKey });
-      });
+    onSuccess: async () => {
+      if (refetch) {
+        await refetch();
+      }
 
       toast({
         title: "Transferência bem-sucedida!",

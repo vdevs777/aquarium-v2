@@ -10,9 +10,13 @@ import { MoveProductionUnitParams } from "@/interfaces/http/ProductionUnit/MoveP
 
 import { ProductionUnitStatus } from "@/interfaces/enums/ProductionUnitStatus";
 
-import { ProductionUnitCreateSchema } from "@/schemas/production-unit-schema";
+import {
+  ProductionUnitCreateSchema,
+  ProductionUnitEditSchema,
+} from "@/schemas/production-unit-schema";
 import { ProductionUnitAllocationSummary } from "@/interfaces/http/ProductionUnit/ProductionUnitAllocationSummary";
 import { ProductionUnitHistoryItem } from "@/interfaces/http/ProductionUnit/ProductionUnitHistoryItem";
+import { ProductionUnitEditRequest } from "@/interfaces/http/ProductionUnit/ProductionUnitEditRequest";
 
 export const productionUnitService = {
   async getAll() {
@@ -55,6 +59,10 @@ export const productionUnitService = {
     );
 
     return data;
+  },
+
+  async edit(id: number, request: ProductionUnitEditRequest) {
+    await api.put(`/unidades-produtivas`, request);
   },
 
   async getSummaryAllocationsById(id: number) {

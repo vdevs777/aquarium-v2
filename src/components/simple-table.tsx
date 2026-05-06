@@ -73,7 +73,7 @@ export function SimpleTable({
                       className={cn(
                         "font-medium",
                         redirectTo
-                          ? "text-blue-600 hover:underline cursor-pointer"
+                          ? "text-blue-600 hover:underline cursor-pointer border-t"
                           : "text-black",
                       )}
                       onClick={
@@ -84,7 +84,9 @@ export function SimpleTable({
                     >
                       {item.label}
                     </TableCell>
-                    <TableCell className="text-right">{item.value}</TableCell>
+                    <TableCell className="text-right border-t">
+                      {item.value}
+                    </TableCell>
                   </TableRow>
                 ))
               )}

@@ -13,7 +13,7 @@ import { useGetProductionSectors } from "./queries/useGetProductionSectors";
 export function ProductionSectorScreen() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  const { productionSectors, isLoading } = useGetProductionSectors();
+  const { productionSectors, isLoading, refetch } = useGetProductionSectors();
 
   return (
     <>
@@ -41,7 +41,13 @@ export function ProductionSectorScreen() {
               >
                 <div className="grid grid-cols-4 gap-3">
                   {sector.unidades.map((unit) => (
-                    <ProductionUnitCard data={unit} key={unit.id} />
+                    <ProductionUnitCard
+                      data={unit}
+                      key={unit.id}
+                      refetch={async () => {
+                        refetch();
+                      }}
+                    />
                   ))}
                 </div>
               </ProductionSectorBox>

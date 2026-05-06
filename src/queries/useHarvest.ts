@@ -1,26 +1,21 @@
-import { QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { batchTransferService } from "@/services/batch-transfer.service";
 import { toast } from "@/hooks/useToast";
 import { handleApiError } from "@/api/helpers/handle-api-error";
 
 interface UseHarvestProps {
   closeDialog: () => void;
-  invalidateQueryKeys?: QueryKey[];
+  refetch?: () => Promise<void> | void;
 }
 
-export function useHarvest({
-  closeDialog,
-  invalidateQueryKeys = [["production-sectors-details"]],
-}: UseHarvestProps) {
-  const queryClient = useQueryClient();
-
+export function useHarvest({ closeDialog, refetch }: UseHarvestProps) {
   return useMutation({
     mutationFn: batchTransferService.harvest,
 
-    onSuccess: () => {
-      invalidateQueryKeys.forEach((queryKey) => {
-        queryClient.invalidateQueries({ queryKey });
-      });
+    onSuccess: async () => {
+      if (refetch) {
+        await refetch();
+      }
 
       toast({
         title: "Despesca bem-sucedida!",

@@ -37,7 +37,13 @@ export const productionUnitCreateSchema = z.object({
   tipoAlimentacaoId: z.number({ error: errorMessages.INVALID_VALUE }),
 });
 
+export const productionUnitEditSchema = productionUnitCreateSchema.extend({
+  sequencia: numberField({ max: 9999 }),
+});
+
 export type ProductionUnitSchema = z.infer<typeof productionUnitSchema>;
+
 export type ProductionUnitCreateSchema = z.infer<
   typeof productionUnitCreateSchema
 >;
+export type ProductionUnitEditSchema = z.infer<typeof productionUnitEditSchema>;

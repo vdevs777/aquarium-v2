@@ -2,10 +2,10 @@ import { productionSectorService } from "@/services/production-sector.service";
 import { useQuery } from "@tanstack/react-query";
 
 export function useGetProductionSectors() {
-  const { data, isLoading } = useQuery({
+  const query = useQuery({
     queryKey: ["production-sectors-details"],
     queryFn: productionSectorService.getAllWithUnitsDetails,
   });
 
-  return { productionSectors: data ?? [], isLoading };
+  return { productionSectors: query.data ?? [], ...query };
 }

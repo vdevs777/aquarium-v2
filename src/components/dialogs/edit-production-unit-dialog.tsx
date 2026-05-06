@@ -1,182 +1,106 @@
-// import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
-// import { Input } from "@/components/ui/input";
-// import { Button } from "@/components/ui/button";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import { useForm } from "react-hook-form";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { z } from "zod";
-// import { getModelos } from "@/api/services/config/modelo";
-// import { useQuery } from "@tanstack/react-query";
-// import { ErrorSelect } from "../select/error-select";
-// import { LoadingSelect } from "../select/loading-select";
-// import { NoResultsSelect } from "../select/no-results-select";
-// import {
-//   unidadeProdutivaSchema,
-//   UnidadeProdutivaSchema,
-// } from "@/schemas/unidade-produtiva-schema";
-// import { Label } from "../ui/label";
-// import { SubmitButton } from "../submit-button";
-// import {
-//   getTipoAlimentacaoList,
-//   getTipoAlimentacaoName,
-//   TipoAlimentacao,
-// } from "@/enums/tipo-de-alimentacao";
-// import { useEffect } from "react";
+import { DialogProps } from "@/interfaces/others/DialogProps";
+import {
+  productionUnitEditSchema,
+  ProductionUnitEditSchema,
+} from "@/schemas/production-unit-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
+import { BasicDialog } from "../basic-dialog";
+import { Label } from "../ui/label";
+import { InputController } from "../controllers/input-controller";
+import { SelectController } from "../controllers/select-controller";
+import { useQuery } from "@tanstack/react-query";
+import { productionUnitModelService } from "@/services/production-unit-model.service";
+import { Button } from "../ui/button";
+import { FormSubmitButton } from "../form-submit-button";
+import { getFeedingTypeOptions } from "@/interfaces/enums/FeedingType";
+import { useEffect } from "react";
 
-// interface EditProductionUnitDialogProps {
-//   onSubmit: (data: UnidadeProdutivaSchema) => Promise<void>;
-//   showSequencia: boolean;
-//   defaultValues: UnidadeProdutivaSchema;
-//   enabled: boolean;
-// }
+type EditProductionUnitDialogProps = DialogProps & {
+  defaultValues: ProductionUnitEditSchema;
+  onSubmit: (data: ProductionUnitEditSchema) => Promise<void>;
+};
 
-// export function EditProductionUnitDialog({
-//   onSubmit,
-//   defaultValues,
-//   enabled,
-// }: EditUnidadeDialogProps) {
-//   const {
-//     data: modelos,
-//     isLoading: isLoadingModelos,
-//     error: errorModelos,
-//   } = useQuery({
-//     queryKey: ["modelos"],
-//     queryFn: getModelos,
-//     enabled: enabled,
-//     // staleTime: Infinity,
-//   });
+export function EditProductionUnitDialog({
+  open,
+  onOpenChange,
+  defaultValues,
+  onSubmit,
+}: EditProductionUnitDialogProps) {
+  const { data: productionUnitModels, isLoading: loadingProductionUnitModels } =
+    useQuery({
+      queryFn: () => productionUnitModelService.getAll(),
+      queryKey: ["production-unit-models"],
+    });
 
-//   const {
-//     register,
-//     setValue,
-//     handleSubmit,
-//     watch,
-//     formState: { errors, isSubmitting },
-//   } = useForm<UnidadeProdutivaSchema>({
-//     resolver: zodResolver(unidadeProdutivaSchema),
-//     defaultValues: {
-//       ...defaultValues,
-//       codigoAlimentador:
-//         defaultValues.tipoAlimentacaoId === TipoAlimentacao.Automatico
-//           ? defaultValues.codigoAlimentador
-//           : null,
-//       tipoAlimentacaoId:
-//         defaultValues.tipoAlimentacaoId ?? TipoAlimentacao.Manual,
-//     },
-//   });
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm({
+    resolver: zodResolver(productionUnitEditSchema),
+    defaultValues,
+  });
 
-//   const tipoAlimentacaoId = watch("tipoAlimentacaoId") as TipoAlimentacao;
+  useEffect(() => {
+    if (!open) reset();
+  }, [open]);
 
-//   useEffect(() => {
-//     if (tipoAlimentacaoId === TipoAlimentacao.Manual) {
-//       setValue("codigoAlimentador", null, { shouldValidate: true });
-//     }
-//   }, [tipoAlimentacaoId, setValue]);
-
-//   return (
-//     <DialogContent>
-//       <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
-//         <div>
-//           <Label htmlFor="codigo">Código</Label>
-//           <Input
-//             id="codigo"
-//             disabled={isSubmitting}
-//             error={errors.codigo?.message}
-//             {...register("codigo")}
-//           />
-//         </div>
-//         <div>
-//           <Label htmlFor="modeloUnidadeProdutivaId">
-//             Modelo de unidade produtiva
-//           </Label>
-//           <Select
-//             onValueChange={(val) =>
-//               setValue("modeloUnidadeProdutivaId", Number(val), {
-//                 shouldValidate: true,
-//               })
-//             }
-//             defaultValue={String(defaultValues.modeloUnidadeProdutivaId)}
-//           >
-//             <SelectTrigger
-//               id="modeloUnidadeProdutivaId"
-//               disabled={isSubmitting}
-//               error={errors.modeloUnidadeProdutivaId?.message}
-//             >
-//               <SelectValue placeholder="Informe o modelo de unidade produtiva" />
-//             </SelectTrigger>
-//             <SelectContent>
-//               {errorModelos ? (
-//                 <ErrorSelect />
-//               ) : isLoadingModelos ? (
-//                 <LoadingSelect />
-//               ) : modelos?.length === 0 ? (
-//                 <NoResultsSelect />
-//               ) : (
-//                 modelos?.map((item) => (
-//                   <SelectItem value={String(item.id)}>{item.nome}</SelectItem>
-//                 ))
-//               )}
-//             </SelectContent>
-//           </Select>
-//         </div>
-//         <div>
-//           <Label htmlFor="sequencia">Sequência</Label>
-//           <Input
-//             id="sequencia"
-//             type="number"
-//             min="1"
-//             step="1"
-//             disabled={isSubmitting}
-//             error={errors.sequencia?.message}
-//             {...register("sequencia", { valueAsNumber: true })}
-//           />
-//         </div>
-//         <div>
-//           <Label htmlFor="modeloUnidadeProdutivaId">Tipo de alimentação</Label>
-//           <Select
-//             onValueChange={(val) =>
-//               setValue("tipoAlimentacaoId", Number(val), {
-//                 shouldValidate: true,
-//               })
-//             }
-//             defaultValue={
-//               String(defaultValues.tipoAlimentacaoId) ??
-//               String(TipoAlimentacao.Manual)
-//             }
-//           >
-//             <SelectTrigger
-//               id="tipoAlimentacaoId"
-//               disabled={isSubmitting}
-//               error={errors.tipoAlimentacaoId?.message}
-//             >
-//               <SelectValue placeholder="Informe o tipo de alimentação" />
-//             </SelectTrigger>
-//             <SelectContent>
-//               {getTipoAlimentacaoList().map((item) => (
-//                 <SelectItem value={String(item.value)}>{item.name}</SelectItem>
-//               ))}
-//             </SelectContent>
-//           </Select>
-//         </div>
-//         {tipoAlimentacaoId === TipoAlimentacao.Automatico && (
-//           <div>
-//             <Label htmlFor="codigoAlimentador">Alimentador (código)</Label>
-//             <Input
-//               id="codigoAlimentador"
-//               disabled={isSubmitting}
-//               error={errors.codigoAlimentador?.message}
-//               {...register("codigoAlimentador")}
-//             />
-//           </div>
-//         )}
-//         <SubmitButton isEdit isSubmitting={isSubmitting} />
-//       </form>
-//     </DialogContent>
-//   );
-// }
+  return (
+    <BasicDialog
+      onOpenChange={onOpenChange}
+      open={open}
+      title="Editar unidade produtiva"
+    >
+      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+        <div className="space-y-2">
+          <Label>Código</Label>
+          <InputController
+            control={control}
+            name="codigo"
+            placeholder="Informe o código"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label>Modelo de unidade produtiva</Label>
+          <SelectController
+            placeholder="Informe o modelo de unidade produtiva"
+            control={control}
+            name="modeloUnidadeProdutivaId"
+            options={
+              productionUnitModels?.map((model) => ({
+                value: String(model.id),
+                label: model.nome,
+              })) ?? []
+            }
+            loading={loadingProductionUnitModels}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label>Sequência</Label>
+          <InputController
+            control={control}
+            name="sequencia"
+            placeholder="Informe a sequência"
+            type="number"
+            step="1"
+            min="0"
+          />
+        </div>{" "}
+        <div className="space-y-2">
+          <Label>Tipo de alimentação</Label>
+          <SelectController
+            placeholder="Informe o tipo de alimentação"
+            control={control}
+            name="tipoAlimentacaoId"
+            options={getFeedingTypeOptions()}
+            loading={loadingProductionUnitModels}
+          />
+        </div>
+        <FormSubmitButton loading={isSubmitting} />
+      </form>
+    </BasicDialog>
+  );
+}

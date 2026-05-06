@@ -21,16 +21,12 @@ import { useTransfer } from "@/queries/useTransfer";
 import { useHarvest } from "@/queries/useHarvest";
 import { MoveProductionUnitDialog } from "@/components/dialogs/move-production-unit-dialog";
 import { useMoveProductionUnit } from "@/queries/useMoveProductionUnit";
-
-function getProductionUnitKeys(id?: number): QueryKey[] {
-  if (!id) return [];
-
-  return [
-    ["production-unit-details", id],
-    ["production-unit-summary-allocations", id],
-    ["production-unit-summary-history", id],
-  ];
-}
+import { EditProductionUnitDialog } from "@/components/dialogs/edit-production-unit-dialog";
+import { FeedingType, getFeedingTypeId } from "@/interfaces/enums/FeedingType";
+import { useEditProductionUnit } from "@/queries/useEditProductionUnit";
+import { ProductionUnitEditRequest } from "@/interfaces/http/ProductionUnit/ProductionUnitEditRequest";
+import { toast } from "@/hooks/useToast";
+import { handleApiError } from "@/api/helpers/handle-api-error";
 
 export function ProductionUnitAnalysisScreen() {
   const router = useRouter();
@@ -40,16 +36,16 @@ export function ProductionUnitAnalysisScreen() {
   const [isHarvestOpen, setIsHarvestOpen] = useState(false);
   const [isMoveOpen, setIsMoveOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const id =
     router.isReady && router.query.id ? Number(router.query.id) : undefined;
 
-  const unitKeys = getProductionUnitKeys(id);
-
-  const { data: productionUnits = [] } = useQuery({
-    queryKey: ["production-units"],
-    queryFn: productionUnitService.getAll,
-  });
+  const { data: productionUnits = [], refetch: refetchProductionUnits } =
+    useQuery({
+      queryKey: ["production-units"],
+      queryFn: productionUnitService.getAll,
+    });
 
   const queryClient = useQueryClient();
 
@@ -59,8 +55,6 @@ export function ProductionUnitAnalysisScreen() {
       .getAll()
       .map((q) => q.queryKey),
   );
-
-  console.log("Invalidando:", unitKeys);
 
   const {
     data: details,
@@ -93,29 +87,55 @@ export function ProductionUnitAnalysisScreen() {
     enabled: !!id,
   });
 
+  const refetchAll = async () => {
+    await Promise.all([
+      refetchDetails(),
+      refetchAllocations(),
+      refetchHistory(),
+      refetchProductionUnits(),
+    ]);
+  };
+
   const { mutateAsync: stock } = useBatchStock({
     closeDialog: () => setIsStockingOpen(false),
-    invalidateQueryKeys: [["production-units"], ...unitKeys],
+    refetch: refetchAll,
   });
 
   const { mutateAsync: transfer } = useTransfer({
     closeDialog: () => setIsTransferOpen(false),
-    invalidateQueryKeys: [["production-units"], ...unitKeys],
+    refetch: refetchAll,
   });
 
   const { mutateAsync: harvest } = useHarvest({
     closeDialog: () => setIsHarvestOpen(false),
-    invalidateQueryKeys: [["production-units"], ...unitKeys],
+    refetch: refetchAll,
   });
 
   const { mutateAsync: moveUnit } = useMoveProductionUnit({
     closeDialog: () => setIsMoveOpen(false),
-    queryKeys: [
-      ["production-sectors-details"],
-      ["production-units"],
-      ["production-unit-details", id],
-    ],
+    refetch: refetchAll,
   });
+
+  async function editUnit(data: ProductionUnitEditRequest) {
+    try {
+      setIsEditing(true);
+
+      await productionUnitService.edit(id!, data);
+
+      await refetchAll();
+
+      setIsEditOpen(false);
+
+      toast({
+        title: "Edição bem-sucedida!",
+        description: "A unidade produtiva foi editada com sucesso.",
+      });
+    } catch (error) {
+      handleApiError(error);
+    } finally {
+      setIsEditing(false);
+    }
+  }
 
   const isBusy =
     isLoading ||
@@ -123,13 +143,19 @@ export function ProductionUnitAnalysisScreen() {
     isFetchingAllocations ||
     isFetchingHistory;
 
+  const title = details
+    ? `${details.codigo}.${details.sequencia}`
+    : isLoading
+      ? "Carregando..."
+      : "Análise";
+
   return (
     <>
       <div>
         <div className="w-full flex justify-between items-center">
           <PageHeader
             path={["Operacional", "Produção", "Unidade produtiva"]}
-            title="Análise"
+            title={title}
             icon={LayoutDashboard}
           />
           <div className="flex flex-row gap-2">
@@ -234,6 +260,40 @@ export function ProductionUnitAnalysisScreen() {
                 sequence: formData.sequencia,
               });
             }}
+          />
+          <EditProductionUnitDialog
+            key={
+              details.id +
+              "-" +
+              details.sequencia +
+              "-" +
+              details.codigo +
+              "-" +
+              details.idModeloUnidadeProdutiva +
+              "-" +
+              details.tipoAlimentacaoId
+            }
+            open={isEditOpen}
+            onOpenChange={setIsEditOpen}
+            defaultValues={{
+              codigo: details.codigo,
+              modeloUnidadeProdutivaId: details.idModeloUnidadeProdutiva,
+              sequencia: details.sequencia,
+              tipoAlimentacaoId: getFeedingTypeId(
+                details.tipoAlimentacao,
+              ) as FeedingType,
+            }}
+            onSubmit={async (data) =>
+              await editUnit({
+                id: id!,
+                modeloUnidadeProdutivaId: data.modeloUnidadeProdutivaId,
+                codigo: data.codigo,
+                codigoAlimentador: details.codigoAlimentador,
+                sequencia: data.sequencia,
+                setorProdutivoId: details.idSetorProdutivo,
+                tipoAlimentacaoId: data.tipoAlimentacaoId,
+              })
+            }
           />
         </>
       )}
