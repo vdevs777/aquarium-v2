@@ -36,6 +36,17 @@ export function Sidebar({ inDialog = false }: SidebarProps) {
         }`}
       >
         <section className="pt-2 px-0 w-full flex flex-col gap-0">
+          <SidebarLabel text="CRM" />
+          <SidebarOpenButton
+            sectionName="customers"
+            icon={User}
+            text="Clientes"
+          >
+            <SidebarSubButton text="Cadastrar" url="/crm/customers/create" />
+            <SidebarSubButton text="Lista" url="/crm/customers/list" />
+          </SidebarOpenButton>
+        </section>
+        <section className="pt-2 px-0 w-full flex flex-col gap-0">
           <SidebarLabel text="OPERACIONAL" />
 
           <SidebarOpenButton

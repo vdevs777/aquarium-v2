@@ -17,6 +17,10 @@ export const cnpjMask: MaskedOptions<any> = {
   mask: "00.000.000/0000-00",
 };
 
+export const cpfMask: MaskedOptions<any> = {
+  mask: "000.000.000-00",
+};
+
 // 🔢 Número puro
 export const numberMask: MaskedOptions<any> = {
   mask: Number,

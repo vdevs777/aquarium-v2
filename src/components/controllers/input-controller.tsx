@@ -1,4 +1,10 @@
-import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldValues,
+  Path,
+  useFormContext,
+} from "react-hook-form";
 
 import { Input, InputProps } from "@/components/ui/input";
 import { MaskedInput } from "../ui/masked-input";
@@ -7,20 +13,26 @@ interface InputControllerProps<T extends FieldValues> extends Omit<
   InputProps,
   "name"
 > {
-  control: Control<T>;
+  control?: Control<T>;
   name: Path<T>;
   mask?: any;
+  transform?: (value: any) => any;
 }
 
 export function InputController<T extends FieldValues>({
   control,
   name,
   mask,
+  transform,
   ...rest
 }: InputControllerProps<T>) {
+  const form = useFormContext<T>();
+
+  const formControl = control ?? form.control;
+
   return (
     <Controller
-      control={control}
+      control={formControl}
       name={name}
       render={({ field, fieldState, formState }) => {
         const errorMessage = fieldState.error?.message;
@@ -33,10 +45,14 @@ export function InputController<T extends FieldValues>({
               {...field}
               {...rest}
               onChange={(e) => {
-                const value =
+                let value =
                   rest.type === "number"
                     ? e.target.valueAsNumber
                     : e.target.value;
+
+                if (transform) {
+                  value = transform(value);
+                }
 
                 field.onChange(value);
               }}

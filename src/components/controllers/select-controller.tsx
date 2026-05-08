@@ -1,4 +1,11 @@
-import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldValues,
+  Path,
+  useFormContext,
+} from "react-hook-form";
+
 import {
   Select,
   SelectContent,
@@ -7,14 +14,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+type ValueConstructor = StringConstructor | NumberConstructor;
+
 interface SelectControllerProps<T extends FieldValues> {
-  control: Control<T>;
+  control?: Control<T>;
+
   name: Path<T>;
+
   placeholder?: string;
-  options: { value: string; label: string }[];
+
+  options: {
+    value: string;
+    label: string;
+  }[];
+
   disabled?: boolean;
+
   contentClassName?: string;
+
   loading?: boolean;
+
+  valueConstructor?: ValueConstructor;
 }
 
 export function SelectController<T extends FieldValues>({
@@ -25,10 +45,15 @@ export function SelectController<T extends FieldValues>({
   disabled,
   contentClassName,
   loading,
+  valueConstructor = Number,
 }: SelectControllerProps<T>) {
+  const form = useFormContext<T>();
+
+  const formControl = control ?? form.control;
+
   return (
     <Controller
-      control={control}
+      control={formControl}
       name={name}
       render={({ field, fieldState, formState }) => {
         const errorMessage = fieldState.error?.message;
@@ -36,8 +61,8 @@ export function SelectController<T extends FieldValues>({
         return (
           <div className="flex flex-col gap-1">
             <Select
-              value={field.value ? String(field.value) : ""}
-              onValueChange={(value) => field.onChange(Number(value))}
+              value={field.value != null ? String(field.value) : ""}
+              onValueChange={(value) => field.onChange(valueConstructor(value))}
               disabled={formState.isSubmitting || disabled}
             >
               <SelectTrigger error={errorMessage} loading={loading}>
