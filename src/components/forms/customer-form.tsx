@@ -11,9 +11,14 @@ import { PersonType } from "@/interfaces/enums/PersonType";
 type CustomerFormProps = {
   defaultValues?: Partial<CustomerSchema>;
   onSubmit: (data: CustomerSchema) => void | Promise<void>;
+  className?: string;
 };
 
-export function CustomerForm({ defaultValues, onSubmit }: CustomerFormProps) {
+export function CustomerForm({
+  defaultValues,
+  onSubmit,
+  className,
+}: CustomerFormProps) {
   return (
     <PersonForm<CustomerSchema>
       schema={customerSchema}
@@ -24,6 +29,7 @@ export function CustomerForm({ defaultValues, onSubmit }: CustomerFormProps) {
         ...defaultValues,
       }}
       onSubmit={onSubmit}
+      className={className}
     >
       <FormRow label="Limite de crédito">
         <InputController

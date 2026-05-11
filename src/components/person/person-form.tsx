@@ -25,14 +25,16 @@ import { SelectController } from "../controllers/select-controller";
 import { InputController } from "../controllers/input-controller";
 import { SwitchController } from "../controllers/switch-controller";
 
-import { cnpjMask, cpfMask } from "@/utils/masks";
+import { cnpjMask, cpfMask, maskValue } from "@/utils/masks";
 import { ZodTypeAny } from "zod/v3";
+import { format } from "date-fns";
 
 type PersonFormProps<T extends FieldValues> = {
   schema: z.ZodObject<any>;
   defaultValues?: DefaultValues<T>;
   onSubmit: SubmitHandler<T>;
   children?: ReactNode;
+  className?: string;
 };
 
 export function PersonForm<T extends FieldValues>({
@@ -40,10 +42,32 @@ export function PersonForm<T extends FieldValues>({
   defaultValues,
   onSubmit,
   children,
+  className,
 }: PersonFormProps<T>) {
+  // @ts-ignore
+  const formattedDefaultValues: DefaultValues<T> = {
+    ...defaultValues,
+    dataNascimento: defaultValues?.dataNascimento
+      ? format(new Date(defaultValues?.dataNascimento), "yyyy-MM-dd")
+      : null,
+    dataAbertura: defaultValues?.dataAbertura
+      ? format(new Date(defaultValues?.dataAbertura), "yyyy-MM-dd")
+      : null,
+    cpf:
+      defaultValues?.tipoPessoa === PersonType.Physical &&
+      defaultValues?.cpfCnpj
+        ? maskValue(defaultValues.cpfCnpj, cpfMask)
+        : null,
+
+    cnpj:
+      defaultValues?.tipoPessoa === PersonType.Legal && defaultValues?.cpfCnpj
+        ? maskValue(defaultValues.cpfCnpj, cnpjMask)
+        : null,
+  };
+
   const methods = useForm<T>({
     resolver: zodResolver(schema) as Resolver<T>,
-    defaultValues,
+    defaultValues: formattedDefaultValues,
   });
 
   const {
@@ -99,7 +123,7 @@ export function PersonForm<T extends FieldValues>({
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormBox>
+        <FormBox className={className}>
           <FormRow label="Tipo de pessoa">
             <SelectController
               name="tipoPessoa"

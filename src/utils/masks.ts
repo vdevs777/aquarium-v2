@@ -1,4 +1,5 @@
-import { MaskedOptions } from "imask";
+import type { MaskedOptions } from "imask";
+import IMask from "imask";
 
 // 📞 Telefone BR (fixo + celular automático)
 export const phoneMask: MaskedOptions<any> = {
@@ -29,4 +30,12 @@ export const numberMask: MaskedOptions<any> = {
 // 🔧 remover máscara
 export function unmask(value: string) {
   return value.replace(/\D/g, "");
+}
+
+export function maskValue(value: string, mask: MaskedOptions<any>) {
+  const masked = IMask.createMask(mask);
+
+  masked.resolve(value);
+
+  return masked.value;
 }

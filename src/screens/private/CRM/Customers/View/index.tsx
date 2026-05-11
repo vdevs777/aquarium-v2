@@ -10,6 +10,8 @@ import { handleApiError } from "@/api/helpers/handle-api-error";
 import { useValidatedNumberIdQuery } from "@/hooks/useValidatedNumberIdQuery";
 import { titleViewFormatter } from "@/utils/title-view-formatter";
 import { PageState } from "@/components/page-state";
+import { Box } from "@/components/ui/box";
+import { ContactDetails } from "@/components/person/contact-details";
 
 export function CustomersViewScreen() {
   const { id, data, isLoading, error, isValidId, isReady } =
@@ -52,11 +54,24 @@ export function CustomersViewScreen() {
         error={error}
         isReady={isReady}
       >
-        <CustomerForm
-          onSubmit={handleCreate}
-          //@ts-ignore
-          defaultValues={data?.pessoa}
-        />
+        <div className="flex bg-white p-6 rounded-lg gap-4">
+          {" "}
+          <Box title="Dados" className="w-1/2">
+            <CustomerForm
+              className="md:w-full"
+              onSubmit={handleCreate}
+              //@ts-ignore
+              defaultValues={{
+                cnpj:
+                  data?.pessoa.tipoPessoa === "J" ? data?.pessoa.cpfCnpj : null,
+                cpf:
+                  data?.pessoa.tipoPessoa === "F" ? data?.pessoa.cpfCnpj : null,
+                ...data?.pessoa,
+              }}
+            />
+          </Box>
+          <ContactDetails id={Number(data?.pessoa.id)} />
+        </div>
       </PageState>
     </div>
   );
