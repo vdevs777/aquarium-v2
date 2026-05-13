@@ -5,6 +5,7 @@ import {
   Clock,
   DollarSign,
   Fish,
+  House,
   LayoutDashboard,
   Package,
   RefreshCcw,
@@ -22,6 +23,7 @@ import { SidebarButton } from "./buttons/sidebar-button";
 import { useSidebarStore } from "@/stores/sidebar-store";
 import { CollapsibleSidebarSubButton } from "./buttons/collapsible-sidebar-sub-button";
 import { sectionColors } from "../section-colors";
+import { primaryColorHEX } from "@/utils/primary-color";
 
 type SidebarProps = {
   inDialog?: boolean;
@@ -37,6 +39,17 @@ export function Sidebar({ inDialog = false }: SidebarProps) {
           !isSidebarOpen ? "hidden" : ""
         }`}
       >
+        <section
+          className="pt-2 px-0 w-full flex flex-col gap-0"
+          style={
+            {
+              "--sidebar-color": primaryColorHEX,
+            } as React.CSSProperties
+          }
+        >
+          <SidebarButton icon={House} path="/home" text="Início" />
+        </section>
+
         <section
           className="pt-2 px-0 w-full flex flex-col gap-0"
           style={
@@ -121,6 +134,10 @@ export function Sidebar({ inDialog = false }: SidebarProps) {
             icon={Wheat}
             text="Alimentação"
           >
+            <SidebarSubButton
+              text="Painel"
+              url="/operational/feeding/dashboard"
+            />
             <CollapsibleSidebarSubButton
               subSectionName="fish-batch"
               text="Lote de produção"

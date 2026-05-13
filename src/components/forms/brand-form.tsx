@@ -24,14 +24,12 @@ export function BrandForm({ defaultValues }: FormProps<BrandSchema>) {
   async function handleCreate(data: BrandSchema) {
     try {
       const response = await brandService.create(data);
-      console.log(response);
       toast({
         title: "Cadastrado com sucesso!",
         description: "Marca cadastrada com sucesso.",
       });
       goToViewScreen(response.id);
     } catch (error) {
-      console.log(error);
       handleApiError(error);
     }
   }

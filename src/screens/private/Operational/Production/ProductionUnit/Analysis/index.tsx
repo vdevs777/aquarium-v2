@@ -48,15 +48,6 @@ export function ProductionUnitAnalysisScreen() {
       queryFn: productionUnitService.getAll,
     });
 
-  const queryClient = useQueryClient();
-
-  console.log(
-    queryClient
-      .getQueryCache()
-      .getAll()
-      .map((q) => q.queryKey),
-  );
-
   const {
     data: details,
     isLoading,

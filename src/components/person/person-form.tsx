@@ -120,8 +120,6 @@ export function PersonForm<T extends FieldValues>({
     }
   }, [selectedPersonType]);
 
-  console.log(defaultValues);
-
   const editFormRowProps = {
     inputColSpan: isEdit ? 8 : undefined,
     labelColSpan: isEdit ? 4 : undefined,

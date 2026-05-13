@@ -31,8 +31,7 @@ export function Header({ showSheet }: HeaderProps) {
   const router = useRouter();
 
   const { companies, isLoading, isReady, tenant, setTenant } = useTenant();
-  const { user } = useAuth();
-  console.log(user);
+  const { user, logout } = useAuth();
   const [isChangeIcon, setChangeIcon] = useState(true);
 
   const toggleSidebar = useSidebarStore((state) => state.toggleSidebar);
@@ -101,8 +100,11 @@ export function Header({ showSheet }: HeaderProps) {
               </span>
             </div>
           </PopoverTrigger>
-          <PopoverContent className="h-auto p-0 bg-white w-auto" align="end">
-            <div className="flex flex-row justify-center pt-2 gap-4">
+          <PopoverContent
+            className="h-auto py-2 p-0 bg-white w-auto"
+            align="end"
+          >
+            <div className="flex flex-row justify-center p-4 pb-0 gap-4">
               <Avatar>
                 <AvatarImage src="https://ibaseminario.com.br/novo/wp-content/uploads/2013/09/default-avatar.png" />
               </Avatar>
@@ -122,11 +124,7 @@ export function Header({ showSheet }: HeaderProps) {
               <Button
                 variant="ghost"
                 className="w-auto justify-start items-center rounded-none hover:bg-primary/10 gap-2 h-9"
-                onClick={() => {
-                  localStorage.removeItem("token");
-                  sessionStorage.removeItem("tenant_id");
-                  // router.push(routes.login);
-                }}
+                onClick={logout}
               >
                 <LogOut strokeWidth="1.5px" width={20} /> Sair
               </Button>

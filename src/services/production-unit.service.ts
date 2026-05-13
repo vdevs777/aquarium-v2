@@ -25,6 +25,13 @@ export const productionUnitService = {
     return data;
   },
 
+  async getDetailed() {
+    const { data } = await api.get<ProductionUnitDetailsModel[]>(
+      `/unidades-produtivas/detalhes`,
+    );
+    return data;
+  },
+
   async getByIdDetails(id: number) {
     const { data } = await api.get<ProductionUnitDetailsModel>(
       `/unidades-produtivas/${id}/detalhes`,

@@ -19,6 +19,7 @@ import { Layout } from "@/components/layout";
 import { useAuthStore } from "@/stores/auth-store";
 
 import { toast } from "@/hooks/useToast";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -74,17 +75,19 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={`${inter.className} bg-white`}>
-        {pagesWithoutLayout.includes(router.pathname) ? (
-          <Component {...pageProps} />
-        ) : (
-          <Layout>
+      <TooltipProvider>
+        <div className={`${inter.className} bg-white`}>
+          {pagesWithoutLayout.includes(router.pathname) ? (
             <Component {...pageProps} />
-          </Layout>
-        )}
-      </div>
+          ) : (
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          )}
+        </div>
 
-      <Toaster />
+        <Toaster />
+      </TooltipProvider>
     </QueryClientProvider>
   );
 }

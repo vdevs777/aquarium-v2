@@ -35,14 +35,12 @@ export function SpeciesForm({
   async function handleCreate(data: SpeciesSchema) {
     try {
       const response = await speciesService.create(data);
-      console.log(response);
       toast({
         title: "Cadastrada com sucesso!",
         description: "Espécie cadastrada com sucesso.",
       });
       goToViewScreen(response.id);
     } catch (error) {
-      console.log(error);
       handleApiError(error);
     }
   }

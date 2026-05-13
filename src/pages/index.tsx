@@ -1,13 +1,12 @@
-import { PageHeader } from "@/components/page-header";
-import { LayoutDashboard } from "lucide-react";
-import colors from "tailwindcss/colors";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
-export default function Home() {
-  return (
-    <PageHeader
-      icon={LayoutDashboard}
-      title="Painel"
-      path={["Teste", "Teste2"]}
-    />
-  );
+export default function IndexPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/home");
+  }, [router]);
+
+  return null;
 }

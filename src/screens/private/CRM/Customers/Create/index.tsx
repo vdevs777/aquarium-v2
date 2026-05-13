@@ -19,7 +19,6 @@ export function CustomersCreateScreen() {
         description: `O cliente foi criado com sucesso.`,
       });
     } catch (error) {
-      console.log(error);
       handleApiError(error);
     }
   }

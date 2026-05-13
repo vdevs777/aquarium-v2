@@ -20,7 +20,6 @@ export function SuppliersCreateScreen() {
         description: `O fornecedor foi criado com sucesso.`,
       });
     } catch (error) {
-      console.log(error);
       handleApiError(error);
     }
   }
