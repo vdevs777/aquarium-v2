@@ -1,28 +1,40 @@
 import { useEffect } from "react";
+
 import type { AppProps } from "next/app";
+
 import { Inter } from "next/font/google";
+
 import { env } from "../../env";
+
 import "@/styles/globals.css";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import { Toaster } from "@/components/ui/toaster";
+
 import { useRouter } from "next/router";
+
 import { Layout } from "@/components/layout";
+
+import { useAuthStore } from "@/stores/auth-store";
+
+import { toast } from "@/hooks/useToast";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-      },
-    },
-  });
 
   const pagesWithoutLayout = ["/login", "/register", "/404"];
 
@@ -33,6 +45,32 @@ export default function App({ Component, pageProps }: AppProps) {
       });
     }
   }, []);
+
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
+
+  useEffect(() => {
+    if (!hasHydrated) return;
+
+    async function validateSession() {
+      const store = useAuthStore.getState();
+
+      const isAuthorized = await store.validateAuth();
+
+      if (!isAuthorized) {
+        store.logout();
+
+        toast({
+          title: "Sessão expirada",
+          description: "Faça login novamente.",
+          variant: "destructive",
+        });
+
+        router.push("/login");
+      }
+    }
+
+    validateSession();
+  }, [hasHydrated]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -45,6 +83,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </Layout>
         )}
       </div>
+
       <Toaster />
     </QueryClientProvider>
   );

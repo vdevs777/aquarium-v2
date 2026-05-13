@@ -23,6 +23,7 @@ import { useSidebarStore } from "@/stores/sidebar-store";
 import { useState } from "react";
 import { useTenant } from "@/hooks/useTenant";
 import Image from "next/image";
+import { useAuth } from "@/hooks/useAuth";
 
 type HeaderProps = { showSheet: () => void };
 
@@ -30,6 +31,8 @@ export function Header({ showSheet }: HeaderProps) {
   const router = useRouter();
 
   const { companies, isLoading, isReady, tenant, setTenant } = useTenant();
+  const { user } = useAuth();
+  console.log(user);
   const [isChangeIcon, setChangeIcon] = useState(true);
 
   const toggleSidebar = useSidebarStore((state) => state.toggleSidebar);
@@ -93,7 +96,7 @@ export function Header({ showSheet }: HeaderProps) {
               </Avatar>
               <span className="flex flex-row items-center text-sm text-slate-600 hover:text-blue-500">
                 {/* {decodedToken?.email}{" "} */}
-                email@email.com
+                {user?.email}
                 <ChevronDown strokeWidth="1.5px" width={17} />
               </span>
             </div>

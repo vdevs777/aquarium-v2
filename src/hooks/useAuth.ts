@@ -1,68 +1,36 @@
-import { handleApiError } from "@/api/helpers/handle-api-error";
-import { LoginSchema } from "@/schemas/login-schema";
-import { RegisterSchema } from "@/schemas/register-schema";
-import { accountService } from "@/services/account.service";
-import { unmask } from "@/utils/masks";
-import { setCursor } from "@/utils/set-cursor";
 import { useRouter } from "next/router";
-import { toast } from "./useToast";
+import { useAuthStore } from "@/stores/auth-store";
 
 export function useAuth() {
   const router = useRouter();
 
-  async function saveToken(value: string) {
-    localStorage.setItem("token", value);
-  }
+  const store = useAuthStore();
 
-  async function login(data: LoginSchema) {
-    try {
-      const token = await accountService.login(data);
-      saveToken(token);
+  async function login(...args: Parameters<typeof store.login>) {
+    await store.login(...args);
+
+    if (useAuthStore.getState().isAuthenticated) {
       router.push("/");
-    } catch (error) {
-      handleApiError(error);
     }
   }
 
-  async function register(data: RegisterSchema) {
-    const unmaskedPhone = unmask(data.telefone);
-    const unmaskedCnpj = unmask(data.cpfCnpj);
+  async function logout() {
+    store.logout();
 
-    const ddd = unmaskedPhone.slice(0, 2);
-    const phone = unmaskedPhone.slice(2);
-
-    try {
-      const result = await accountService.register({
-        ...data,
-        ddd,
-        telefone: phone,
-        cpfCnpj: unmaskedCnpj,
-      });
-
-      router.push("/login");
-
-      if (result === "success") {
-        toast({
-          title: "Empresa registrada com sucesso",
-          description:
-            "Realize o login e selecione a nova empresa que foi registrada.",
-        });
-      }
-
-      if (result === "pending") {
-        toast({
-          title: "Empresa registrada com sucesso",
-          description:
-            "Um e-mail de confirmação foi enviado. Por favor, verifique sua caixa de entrada.",
-        });
-      }
-    } catch (error) {
-      handleApiError(error);
-    }
+    router.push("/login");
   }
 
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  async function register(...args: Parameters<typeof store.register>) {
+    await store.register(...args);
 
-  return { saveToken, login, register, token };
+    router.push("/login");
+  }
+
+  return {
+    ...store,
+
+    login,
+    logout,
+    register,
+  };
 }

@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
+
 import { useQuery } from "@tanstack/react-query";
+
 import { accountService } from "@/services/account.service";
+
+import { useAuthStore } from "@/stores/auth-store";
 
 export function useTenant() {
   const [tenant, setTenantState] = useState<string | null>(null);
+
   const [isReady, setIsReady] = useState(false);
 
   const {
@@ -19,17 +24,21 @@ export function useTenant() {
     document.body.style.cursor = "wait";
 
     sessionStorage.setItem("tenant_id", tenantId);
+
     setTenantState(tenantId);
 
     const token = await accountService.refreshTokenWithTenantId(tenantId);
-    localStorage.setItem("token", token);
+
+    useAuthStore.getState().setToken(token);
 
     document.body.style.cursor = "default";
   }
 
   useEffect(() => {
     const stored = sessionStorage.getItem("tenant_id");
+
     setTenantState(stored);
+
     setIsReady(true);
   }, []);
 

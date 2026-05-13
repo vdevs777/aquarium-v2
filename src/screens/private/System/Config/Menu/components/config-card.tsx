@@ -54,18 +54,7 @@ export function ConfigCard({ title, links, color }: ConfigCardProps) {
               >
                 {link.icon}
 
-                <p
-                  className="text-sm text-primary"
-                  style={
-                    color
-                      ? {
-                          color,
-                        }
-                      : undefined
-                  }
-                >
-                  {link.name}
-                </p>
+                <p className="text-sm text-blue-600">{link.name}</p>
               </button>
             ))}
           </div>

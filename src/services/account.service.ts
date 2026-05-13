@@ -40,9 +40,16 @@ async function refreshTokenWithTenantId(id: string): Promise<string> {
   return data;
 }
 
+async function checkAuthorization() {
+  const response = await PROVISORY_CLEAN_INSTANCE.get("/validar-acesso");
+  console.log("Validate token", response.status === 200);
+  return response.status === 200;
+}
+
 export const accountService = {
   login,
   register,
   getCompanies,
   refreshTokenWithTenantId,
+  checkAuthorization,
 };
