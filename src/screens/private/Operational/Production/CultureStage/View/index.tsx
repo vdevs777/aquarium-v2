@@ -10,6 +10,7 @@ import { Fish } from "lucide-react";
 import { CultureStageBox } from "./components/boxes/culture-stage-box";
 import { FishFeedBox } from "./components/boxes/fish-feed-box";
 import { ProductionUnitModelBox } from "./components/boxes/production-unit-model-box";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function CultureStageViewScreen() {
   const { id, data, isLoading, error, isValidId, isReady } =
@@ -33,6 +34,7 @@ export function CultureStageViewScreen() {
         icon={Fish}
         title={title}
         path={["Operacional", "Produção", "Fase de cultivo"]}
+        color={sectionColors.operational}
       />
       <PageState
         isValidId={isValidId}

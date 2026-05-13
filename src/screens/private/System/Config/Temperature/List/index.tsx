@@ -16,6 +16,7 @@ import { temperatureService } from "@/services/temperature.service";
 import { TemperatureModel } from "@/interfaces/models/Temperature";
 import { formatDateTime } from "@/utils/date-fns";
 import { populateTemperatures } from "@/mocks/handlers/temperature";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function TemperatureListScreen() {
   const qc = useQueryClient();
@@ -53,6 +54,7 @@ export function TemperatureListScreen() {
             icon={Thermometer}
             title="Lista"
             path={["Sistema", "Configurações", "Temperatura"]}
+            color={sectionColors.system}
           />
           <div className="space-x-2">
             <CreateButton />

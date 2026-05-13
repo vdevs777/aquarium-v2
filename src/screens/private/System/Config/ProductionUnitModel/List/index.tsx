@@ -7,6 +7,7 @@ import { productionUnitModelService } from "@/services/production-unit-model.ser
 import { Button } from "@/components/ui/button";
 import { CreateButton } from "@/components/buttons/create-button";
 import { PopulateButton } from "@/components/buttons/populate-button";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function ProductionUnitModelListScreen() {
   const { data, isLoading, error } = useQuery({
@@ -21,6 +22,7 @@ export function ProductionUnitModelListScreen() {
           icon={Blend}
           title="Lista"
           path={["Sistema", "Configurações", "Modelo de Unidade Produtiva"]}
+          color={sectionColors.system}
         />
         <CreateButton />
       </div>

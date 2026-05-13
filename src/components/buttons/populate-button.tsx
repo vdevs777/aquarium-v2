@@ -1,7 +1,7 @@
 import { Sprout } from "lucide-react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/router";
-import { env } from "@/env";
+import { env } from "../../../env";
 
 type PopulateButtonProps = {
   onClick?: () => void;

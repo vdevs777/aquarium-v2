@@ -11,23 +11,33 @@ import { PersonType } from "@/interfaces/enums/PersonType";
 type SupplierFormProps = {
   defaultValues?: Partial<SupplierSchema>;
   onSubmit: (data: SupplierSchema) => void | Promise<void>;
+  isEdit?: boolean;
 };
 
-export function SupplierForm({ defaultValues, onSubmit }: SupplierFormProps) {
+export function SupplierForm({
+  defaultValues,
+  onSubmit,
+  isEdit,
+}: SupplierFormProps) {
+  const editFormRowProps = {
+    inputColSpan: isEdit ? 8 : undefined,
+    labelColSpan: isEdit ? 4 : undefined,
+  };
+
   return (
     <PersonForm<SupplierSchema>
       schema={supplierSchema}
       defaultValues={{
         tipoPessoa: PersonType.Legal,
         contribuinte: false,
-        ativo: true,
         ...defaultValues,
       }}
       onSubmit={onSubmit}
+      isEdit={isEdit}
     >
-      <FormRow label="Ativo">
+      {/* <FormRow label="Ativo" {...editFormRowProps}>
         <SwitchController name="ativo" />
-      </FormRow>
+      </FormRow> */}
     </PersonForm>
   );
 }

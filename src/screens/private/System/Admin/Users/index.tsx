@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { filter } from "@/utils/filter";
 import { InviteDialog } from "./components/invite-dialog";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function UsersScreen() {
   const qc = useQueryClient();
@@ -39,11 +40,12 @@ export function UsersScreen() {
             icon={Users}
             title="Usuários"
             path={["Sistema", "Administração"]}
+            color={sectionColors.system}
           />
           <div className="space-x-2 flex">
             <Input
               className="bg-white"
-              leftIcon={Search}
+              leftDecorator={Search}
               placeholder="Pesquisar usuários..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}

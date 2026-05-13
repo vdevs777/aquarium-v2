@@ -1,6 +1,7 @@
 import { PageHeader } from "@/components/page-header";
 import { Blend } from "lucide-react";
 import { ProductionUnitModelForm } from "@/components/forms/production-unit-model-form";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function ProductionUnitModelCreateScreen() {
   return (
@@ -9,6 +10,7 @@ export function ProductionUnitModelCreateScreen() {
         icon={Blend}
         title="Cadastrar"
         path={["Sistema", "Configurações", "Modelo de Unidade Produtiva"]}
+        color={sectionColors.system}
       />
       <ProductionUnitModelForm />
     </div>

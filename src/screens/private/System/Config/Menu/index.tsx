@@ -9,14 +9,22 @@ import {
 } from "lucide-react";
 import { ConfigCard } from "./components/config-card";
 import { PageHeader } from "@/components/page-header";
+import { sectionColors } from "@/components/layout/section-colors";
+import colors from "tailwindcss/colors";
 
 export function ConfigScreen() {
   return (
     <div>
-      <PageHeader icon={Settings} title="Configurações" path={["Sistema"]} />
+      <PageHeader
+        icon={Settings}
+        title="Configurações"
+        path={["Sistema"]}
+        color={sectionColors.system}
+      />
       <div className="flex flex-col gap-4">
         <ConfigCard
           title="Produção"
+          color={colors.purple[600]}
           links={[
             {
               icon: <Blend size={20} />,

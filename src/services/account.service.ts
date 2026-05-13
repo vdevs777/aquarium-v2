@@ -1,5 +1,5 @@
 import { setToken } from "@/api/helpers/set-token";
-import { env } from "@/env";
+import { env } from "../../env";
 
 import { RegisterUser } from "@/interfaces/http/Auth/RegisterUser";
 import { CompanyModel } from "@/interfaces/models/Company";

@@ -1,4 +1,3 @@
-import { uuid } from "uuidv4";
 import { EmailCard } from "./email-card";
 import { PhoneCard } from "./phone-card";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -224,6 +223,7 @@ export function ContactDetails({ id }: ContactDetailsProps) {
             <Button
               className="size-8"
               onClick={() => setIsCreateDialogOpen(true)}
+              variant="outline"
             >
               <Plus />
             </Button>
@@ -244,7 +244,7 @@ export function ContactDetails({ id }: ContactDetailsProps) {
                 email={email}
                 deleteFn={deleteEmailFn}
                 editFn={editEmailFn}
-                key={uuid()}
+                key={email.id}
               />
             ))}
           {selectWindow === "telefone" &&
@@ -253,7 +253,7 @@ export function ContactDetails({ id }: ContactDetailsProps) {
                 telefone={telefone}
                 deleteFn={deleteTelefoneFn}
                 editFn={editTelefoneFn}
-                key={uuid()}
+                key={telefone.id}
               />
             ))}
         </Box>

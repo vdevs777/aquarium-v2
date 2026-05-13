@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
-import { env } from "@/env";
+import { env } from "../../env";
 import "@/styles/globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";

@@ -14,6 +14,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Fish } from "lucide-react";
 import { Species } from "./components/species";
 import { Strains } from "./components/strains";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function SpeciesViewScreen() {
   const { id, data, isLoading, error, isValidId, isReady } =
@@ -37,6 +38,7 @@ export function SpeciesViewScreen() {
         icon={Fish}
         title={title}
         path={["Sistema", "Configurações", "Espécies"]}
+        color={sectionColors.system}
       />
       <PageState
         isValidId={isValidId}

@@ -1,4 +1,5 @@
 import { FishFeedForm } from "@/components/forms/fish-feed-form";
+import { sectionColors } from "@/components/layout/section-colors";
 import { PageHeader } from "@/components/page-header";
 import { PageState } from "@/components/page-state";
 import { useValidatedNumberIdQuery } from "@/hooks/useValidatedNumberIdQuery";
@@ -28,6 +29,7 @@ export function FishFeedViewScreen() {
         icon={Blend}
         title={title}
         path={["Sistema", "Configurações", "Ração"]}
+        color={sectionColors.system}
       />
 
       <PageState

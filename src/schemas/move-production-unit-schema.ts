@@ -1,5 +1,5 @@
 import z from "zod";
-import { errorMessages } from "@/constants/error-messages";
+import { errorMessages } from "@/utils/error-messages";
 import { numberField } from "./utils/number-field";
 
 export const moveProductionUnitSchema = z.object({

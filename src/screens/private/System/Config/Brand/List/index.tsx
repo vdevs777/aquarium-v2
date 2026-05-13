@@ -5,6 +5,7 @@ import { columns } from "./components/columns";
 import { useQuery } from "@tanstack/react-query";
 import { CreateButton } from "@/components/buttons/create-button";
 import { brandService } from "@/services/brand.service";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function BrandListScreen() {
   const { data, isLoading, error } = useQuery({
@@ -19,6 +20,7 @@ export function BrandListScreen() {
           icon={Building2}
           title="Lista"
           path={["Sistema", "Configurações", "Marca"]}
+          color={sectionColors.system}
         />
         <CreateButton />
       </div>

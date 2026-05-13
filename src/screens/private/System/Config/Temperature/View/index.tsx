@@ -1,5 +1,6 @@
 import { ProductionUnitModelForm } from "@/components/forms/production-unit-model-form";
 import { TemperatureForm } from "@/components/forms/temperature-form";
+import { sectionColors } from "@/components/layout/section-colors";
 import { PageHeader } from "@/components/page-header";
 import { PageState } from "@/components/page-state";
 import { useValidatedNumberIdQuery } from "@/hooks/useValidatedNumberIdQuery";
@@ -33,6 +34,7 @@ export function TemperatureViewScreen() {
         icon={Thermometer}
         title={title}
         path={["Sistema", "Configurações", "Temperatura"]}
+        color={sectionColors.system}
       />
 
       <PageState

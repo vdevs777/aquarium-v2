@@ -7,6 +7,7 @@ import { customerService } from "@/services/customer.service";
 import { goToViewScreen } from "@/utils/go-to-view-screen";
 import { toast } from "@/hooks/useToast";
 import { handleApiError } from "@/api/helpers/handle-api-error";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function CustomersCreateScreen() {
   async function handleCreate(data: CustomerSchema) {
@@ -25,7 +26,12 @@ export function CustomersCreateScreen() {
 
   return (
     <div>
-      <PageHeader icon={User} title="Cadastrar" path={["CRM", "Clientes"]} />
+      <PageHeader
+        icon={User}
+        title="Cadastrar"
+        path={["CRM", "Clientes"]}
+        color={sectionColors.crm}
+      />
       <CustomerForm onSubmit={handleCreate} />
     </div>
   );

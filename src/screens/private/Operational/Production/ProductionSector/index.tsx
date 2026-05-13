@@ -9,6 +9,7 @@ import { productionSectorService } from "@/services/production-sector.service";
 import { Spinner } from "@/components/ui/spinner";
 import { ProductionUnitCard } from "./components/production-unit-card";
 import { useGetProductionSectors } from "./queries/useGetProductionSectors";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function ProductionSectorScreen() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -23,6 +24,7 @@ export function ProductionSectorScreen() {
             icon={Boxes}
             title="Setor produtivo"
             path={["Operacional", "Produção"]}
+            color={sectionColors.operational}
           />
           <CreateButton onClick={() => setIsCreateOpen(true)} />
         </div>

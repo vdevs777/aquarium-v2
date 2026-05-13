@@ -1,5 +1,5 @@
 import z from "zod";
-import { errorMessages } from "@/constants/error-messages";
+import { errorMessages } from "@/utils/error-messages";
 
 export const speciesSchema = z.object({
   nome: z

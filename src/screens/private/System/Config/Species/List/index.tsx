@@ -12,6 +12,7 @@ import { Fish } from "lucide-react";
 import { useState } from "react";
 import { columns } from "./components/columns";
 import { DeleteDialog } from "@/components/dialogs/delete-dialog";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function SpeciesListScreen() {
   const qc = useQueryClient();
@@ -50,6 +51,7 @@ export function SpeciesListScreen() {
             icon={Fish}
             title="Lista"
             path={["Sistema", "Configurações", "Espécies"]}
+            color={sectionColors.system}
           />
           <div className="space-x-2">
             <CreateButton />

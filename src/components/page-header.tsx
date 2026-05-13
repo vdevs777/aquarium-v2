@@ -1,13 +1,20 @@
-import { TwColor } from "@/interfaces/others/TwColor";
+import { cn } from "@/lib/utils";
+import { primaryColorHEX } from "@/utils/primary-color";
 import { LucideIcon } from "lucide-react";
 
 type PageHeaderProps = {
   icon: LucideIcon;
   title: string;
   path?: string[];
+  color?: string;
 };
 
-export function PageHeader({ icon: Icon, title, path }: PageHeaderProps) {
+export function PageHeader({
+  icon: Icon,
+  title,
+  path,
+  color,
+}: PageHeaderProps) {
   function getFormattedPath(): string {
     if (!path) return "";
 
@@ -18,7 +25,12 @@ export function PageHeader({ icon: Icon, title, path }: PageHeaderProps) {
 
   return (
     <div className="flex flex-row items-center gap-3 mb-6">
-      <div className="size-10 rounded-sm flex items-center justify-center bg-primary">
+      <div
+        className={cn("size-10 rounded-sm flex items-center justify-center")}
+        style={{
+          backgroundColor: color ?? primaryColorHEX,
+        }}
+      >
         <Icon size={22} className="text-white" />
       </div>
       <div className="flex flex-col justify-center">

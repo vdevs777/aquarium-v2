@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { PersonTypeSelect } from "@/components/person-type-select";
 import { useState } from "react";
 import { PersonType } from "@/interfaces/enums/PersonType";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function CustomersListScreen() {
   const [selectedPersonTypes, setSelectedPersonTypes] = useState({
@@ -44,7 +45,12 @@ export function CustomersListScreen() {
   return (
     <div>
       <div className="flex-row flex justify-between items-center w-full">
-        <PageHeader icon={User} title="Lista" path={["CRM", "Clientes"]} />
+        <PageHeader
+          icon={User}
+          title="Lista"
+          path={["CRM", "Clientes"]}
+          color={sectionColors.crm}
+        />
         <div className="flex space-x-4 flex-row items-center">
           <PersonTypeSelect
             value={selectedPersonTypes}

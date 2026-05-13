@@ -12,6 +12,7 @@ import { handleApiError } from "@/api/helpers/handle-api-error";
 import { DeleteDialog } from "@/components/dialogs/delete-dialog";
 import { PopulateButton } from "@/components/buttons/populate-button";
 import { populateFishFeedBatches } from "@/mocks/handlers/fish-feed-batch";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function FishFeedBatchListScreen() {
   const qc = useQueryClient();
@@ -49,6 +50,7 @@ export function FishFeedBatchListScreen() {
             icon={PackageOpen}
             title="Lista"
             path={["Operacional", "Alimentação", "Lote de ração"]}
+            color={sectionColors.operational}
           />
           <div className="space-x-2">
             <CreateButton />

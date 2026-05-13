@@ -12,6 +12,7 @@ import { toast } from "@/hooks/useToast";
 import { handleApiError } from "@/api/helpers/handle-api-error";
 import { PopulateButton } from "@/components/buttons/populate-button";
 import { populateFishFeeds } from "@/mocks/handlers/fish-feed";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function FishFeedListScreen() {
   const qc = useQueryClient();
@@ -51,6 +52,7 @@ export function FishFeedListScreen() {
             icon={Wheat}
             title="Lista"
             path={["Sistema", "Configurações", "Ração"]}
+            color={sectionColors.system}
           />
           <div className="space-x-2">
             <CreateButton />

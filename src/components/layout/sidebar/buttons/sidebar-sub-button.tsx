@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
 
@@ -14,16 +13,20 @@ export function SidebarSubButton({
   url,
   insideCollapsible = false,
   className,
+  style,
   ...rest
 }: SidebarSubButtonInterface) {
   const router = useRouter();
+
   const fixedUrl = url.startsWith("/") ? url : `/${url}`;
+
   const isActive = router.pathname === fixedUrl;
 
   return (
     <Link href={fixedUrl} passHref>
       <button
         {...rest}
+        style={style}
         className={cn(
           "relative group w-full transition-all duration-75 h-8 rounded-none flex justify-start gap-4 bg-white my-0 text-sm items-center text-black hover:bg-zinc-200",
           isActive && "font-bold",
@@ -33,15 +36,14 @@ export function SidebarSubButton({
         <span className={cn("font-normal", isActive && "font-bold", className)}>
           {text}
         </span>
-        {isActive ? (
-          <span
-            className={`absolute right-0 h-full w-1 bg-primary opacity-100`}
-          ></span>
-        ) : (
-          <span
-            className={`absolute right-0 h-full w-1 bg-primary opacity-0 group-hover:opacity-100`}
-          ></span>
-        )}
+
+        <span
+          className={cn(
+            "absolute right-0 h-full w-1 transition-opacity",
+            isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100",
+            "bg-[var(--sidebar-color,hsl(var(--primary)))]",
+          )}
+        />
       </button>
     </Link>
   );

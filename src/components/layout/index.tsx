@@ -24,7 +24,7 @@ export function Layout({ children }: PropsWithChildren) {
         <div className="p-5 bg-gray-50 w-full">{children}</div>
       </div>
       <footer className="bg-white h-auto text-xs py-1 flex items-center justify-center">
-        © 2024-2026 IotarJR - Versão: xxx-xxx
+        © 2024-{new Date().getFullYear()} IotarJR - Versão: xxx-xxx
       </footer>
     </div>
   );

@@ -12,13 +12,20 @@ type CustomerFormProps = {
   defaultValues?: Partial<CustomerSchema>;
   onSubmit: (data: CustomerSchema) => void | Promise<void>;
   className?: string;
+  isEdit?: boolean;
 };
 
 export function CustomerForm({
   defaultValues,
   onSubmit,
   className,
+  isEdit,
 }: CustomerFormProps) {
+  const editFormRowProps = {
+    inputColSpan: isEdit ? 8 : undefined,
+    labelColSpan: isEdit ? 4 : undefined,
+  };
+
   return (
     <PersonForm<CustomerSchema>
       schema={customerSchema}
@@ -30,8 +37,9 @@ export function CustomerForm({
       }}
       onSubmit={onSubmit}
       className={className}
+      isEdit={isEdit}
     >
-      <FormRow label="Limite de crédito">
+      <FormRow label="Limite de crédito" {...editFormRowProps}>
         <InputController
           name="limiteCredito"
           type="number"

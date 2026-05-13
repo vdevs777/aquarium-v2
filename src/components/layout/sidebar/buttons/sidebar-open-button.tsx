@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, LucideIcon } from "lucide-react";
 import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
@@ -18,9 +17,11 @@ export function SidebarOpenButton({
   sectionName,
   pathSplit = 2,
   className,
+  style,
   ...rest
 }: SidebarOpenButtonProps) {
   const router = useRouter();
+
   const path = router.pathname.split("/")[pathSplit];
 
   const [isOpen, setIsOpen] = useState(false);
@@ -32,13 +33,15 @@ export function SidebarOpenButton({
   }
 
   return (
-    <div className="relative">
+    <div className="relative" style={style}>
       <button
         onClick={toggle}
         className={cn(
           "w-full h-8 rounded-none flex items-center justify-between font-normal group px-3 transition-all duration-75",
-          "bg-white text-black hover:bg-primary hover:text-white",
-          isActive && "bg-primary text-white",
+          "bg-white text-black",
+          "hover:bg-[var(--sidebar-color,hsl(var(--primary)))] hover:text-white",
+          isActive &&
+            "bg-[var(--sidebar-color,hsl(var(--primary)))] text-white",
           className,
         )}
         {...rest}
@@ -49,7 +52,9 @@ export function SidebarOpenButton({
             size={20}
             className={cn(
               "group-hover:text-white",
-              isActive ? "text-white" : "text-primary",
+              isActive
+                ? "text-white"
+                : "text-[var(--sidebar-color,hsl(var(--primary)))]",
             )}
           />
 
@@ -69,7 +74,9 @@ export function SidebarOpenButton({
             size={16}
             className={cn(
               "group-hover:text-white",
-              isActive ? "text-white" : "text-primary",
+              isActive
+                ? "text-white"
+                : "text-[var(--sidebar-color,hsl(var(--primary)))]",
             )}
           />
         ) : (
@@ -77,7 +84,9 @@ export function SidebarOpenButton({
             size={16}
             className={cn(
               "group-hover:text-white",
-              isActive ? "text-white" : "text-primary",
+              isActive
+                ? "text-white"
+                : "text-[var(--sidebar-color,hsl(var(--primary)))]",
             )}
           />
         )}

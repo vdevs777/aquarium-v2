@@ -10,6 +10,7 @@ import { Fish } from "lucide-react";
 import { useState } from "react";
 import { columns } from "./components/columns";
 import { DeleteDialog } from "@/components/dialogs/delete-dialog";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function FishBatchListScreen() {
   const qc = useQueryClient();
@@ -48,6 +49,7 @@ export function FishBatchListScreen() {
             title="Lista"
             icon={Fish}
             path={["Operacional", "Alimentação", "Lote produtivo"]}
+            color={sectionColors.operational}
           />
           <CreateButton />
         </div>

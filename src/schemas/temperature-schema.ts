@@ -1,5 +1,5 @@
 import z from "zod";
-import { errorMessages } from "@/constants/error-messages";
+import { errorMessages } from "@/utils/error-messages";
 
 export const temperatureSchema = z.object({
   data: z.coerce.date(errorMessages.INVALID_VALUE),

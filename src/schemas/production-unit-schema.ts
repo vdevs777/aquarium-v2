@@ -1,4 +1,4 @@
-import { errorMessages } from "@/constants/error-messages";
+import { errorMessages } from "@/utils/error-messages";
 import { z } from "zod";
 import { numberField } from "./utils/number-field";
 

@@ -24,4 +24,18 @@ export const customerService = {
 
     return response.data;
   },
+
+  async update(
+    id: number,
+    { cpf, cnpj, limiteDeCredito, ...data }: CustomerSchema,
+  ) {
+    await api.put<CustomerModel>(`/Cliente/${id}`, {
+      id,
+      pessoa: {
+        ...data,
+        cpfCnpj: cpf ?? cnpj,
+      },
+      limiteDeCredito,
+    });
+  },
 };

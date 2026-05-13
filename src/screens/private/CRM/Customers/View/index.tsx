@@ -12,9 +12,10 @@ import { titleViewFormatter } from "@/utils/title-view-formatter";
 import { PageState } from "@/components/page-state";
 import { Box } from "@/components/ui/box";
 import { ContactDetails } from "@/components/person/contact-details";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function CustomersViewScreen() {
-  const { id, data, isLoading, error, isValidId, isReady } =
+  const { id, data, isLoading, error, isValidId, isReady, refetch } =
     useValidatedNumberIdQuery({
       queryFn: (id) => customerService.getById(id),
       queryKey: ["customer"],
@@ -31,15 +32,14 @@ export function CustomersViewScreen() {
 
   async function handleCreate(data: CustomerSchema) {
     try {
-      const {
-        id,
-        pessoa: { nome },
-      } = await customerService.create(data);
-      goToViewScreen(id);
+      await customerService.update(Number(id), data);
+
       toast({
-        title: "Cliente cadastrado com sucesso!",
-        description: `O cliente ${nome} foi criado com sucesso.`,
+        title: "Cliente atualizado com sucesso!",
+        description: `O cliente foi atualizado com sucesso.`,
       });
+
+      refetch();
     } catch (error) {
       handleApiError(error);
     }
@@ -47,7 +47,12 @@ export function CustomersViewScreen() {
 
   return (
     <div>
-      <PageHeader icon={User} title={title} path={["CRM", "Clientes"]} />
+      <PageHeader
+        icon={User}
+        title={title}
+        path={["CRM", "Clientes"]}
+        color={sectionColors.crm}
+      />
       <PageState
         isValidId={isValidId}
         isLoading={isLoading}
@@ -56,7 +61,7 @@ export function CustomersViewScreen() {
       >
         <div className="flex bg-white p-6 rounded-lg gap-4">
           {" "}
-          <Box title="Dados" className="w-1/2">
+          <Box title="Dados" className="w-2/3">
             <CustomerForm
               className="md:w-full"
               onSubmit={handleCreate}
@@ -68,6 +73,7 @@ export function CustomersViewScreen() {
                   data?.pessoa.tipoPessoa === "F" ? data?.pessoa.cpfCnpj : null,
                 ...data?.pessoa,
               }}
+              isEdit
             />
           </Box>
           <ContactDetails id={Number(data?.pessoa.id)} />

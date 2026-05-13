@@ -1,4 +1,5 @@
 import { FishFeedBatchForm } from "@/components/forms/fish-feed-batch-form";
+import { sectionColors } from "@/components/layout/section-colors";
 import { PageHeader } from "@/components/page-header";
 import { PageState } from "@/components/page-state";
 import { useValidatedNumberIdQuery } from "@/hooks/useValidatedNumberIdQuery";
@@ -29,6 +30,7 @@ export function FishFeedBatchViewScreen() {
         icon={PackageOpen}
         title={title}
         path={["Operacional", "Alimentação", "Lote de ração"]}
+        color={sectionColors.operational}
       />
 
       <PageState

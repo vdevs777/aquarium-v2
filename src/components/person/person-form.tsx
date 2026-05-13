@@ -35,6 +35,7 @@ type PersonFormProps<T extends FieldValues> = {
   onSubmit: SubmitHandler<T>;
   children?: ReactNode;
   className?: string;
+  isEdit?: boolean;
 };
 
 export function PersonForm<T extends FieldValues>({
@@ -43,6 +44,7 @@ export function PersonForm<T extends FieldValues>({
   onSubmit,
   children,
   className,
+  isEdit = false,
 }: PersonFormProps<T>) {
   // @ts-ignore
   const formattedDefaultValues: DefaultValues<T> = {
@@ -118,27 +120,34 @@ export function PersonForm<T extends FieldValues>({
     }
   }, [selectedPersonType]);
 
-  console.log(errors);
+  console.log(defaultValues);
+
+  const editFormRowProps = {
+    inputColSpan: isEdit ? 8 : undefined,
+    labelColSpan: isEdit ? 4 : undefined,
+  };
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormBox className={className}>
-          <FormRow label="Tipo de pessoa">
-            <SelectController
-              name="tipoPessoa"
-              options={getPersonTypeOptions()}
-              valueConstructor={String}
-            />
-          </FormRow>
+          {!isEdit && (
+            <FormRow label="Tipo de pessoa" {...editFormRowProps}>
+              <SelectController
+                name="tipoPessoa"
+                options={getPersonTypeOptions()}
+                valueConstructor={String}
+              />
+            </FormRow>
+          )}
 
-          <FormRow label="Nome">
+          <FormRow label="Nome" {...editFormRowProps}>
             <InputController name="nome" placeholder="Informe o nome" />
           </FormRow>
 
           {selectedPersonType === PersonType.Physical && (
             <>
-              <FormRow label="CPF">
+              <FormRow label="CPF" {...editFormRowProps}>
                 <InputController
                   name="cpf"
                   mask={cpfMask.mask}
@@ -146,18 +155,18 @@ export function PersonForm<T extends FieldValues>({
                 />
               </FormRow>
 
-              <FormRow label="Data de nascimento">
+              <FormRow label="Data de nascimento" {...editFormRowProps}>
                 <InputController name="dataNascimento" type="date" />
               </FormRow>
 
-              <FormRow label="Registro geral">
+              <FormRow label="Registro geral" {...editFormRowProps}>
                 <InputController
                   name="numeroDocumento"
                   placeholder="Informe o registro geral (opcional)"
                 />
               </FormRow>
 
-              <FormRow label="Órgão expedidor">
+              <FormRow label="Órgão expedidor" {...editFormRowProps}>
                 <InputController
                   name="orgaoEmissor"
                   placeholder="Informe o órgão expedidor (opcional)"
@@ -165,7 +174,7 @@ export function PersonForm<T extends FieldValues>({
                 />
               </FormRow>
 
-              <FormRow label="Gênero">
+              <FormRow label="Gênero" {...editFormRowProps}>
                 <SelectController
                   name="generoId"
                   options={getGenderOptions()}
@@ -177,7 +186,7 @@ export function PersonForm<T extends FieldValues>({
 
           {selectedPersonType === PersonType.Legal && (
             <>
-              <FormRow label="CNPJ">
+              <FormRow label="CNPJ" {...editFormRowProps}>
                 <InputController
                   name="cnpj"
                   mask={cnpjMask.mask}
@@ -185,32 +194,32 @@ export function PersonForm<T extends FieldValues>({
                 />
               </FormRow>
 
-              <FormRow label="Razão social">
+              <FormRow label="Razão social" {...editFormRowProps}>
                 <InputController
                   name="razaoSocial"
                   placeholder="Informe a razão social"
                 />
               </FormRow>
 
-              <FormRow label="Contribuinte">
+              <FormRow label="Contribuinte" {...editFormRowProps}>
                 <SwitchController name="contribuinte" />
               </FormRow>
 
-              <FormRow label="Inscrição estadual">
+              <FormRow label="Inscrição estadual" {...editFormRowProps}>
                 <InputController
                   name="inscricaoEstadual"
                   placeholder="Informe a inscrição estadual"
                 />
               </FormRow>
 
-              <FormRow label="Inscrição municipal">
+              <FormRow label="Inscrição municipal" {...editFormRowProps}>
                 <InputController
                   name="inscricaoMunicipal"
                   placeholder="Informe a inscrição municipal"
                 />
               </FormRow>
 
-              <FormRow label="Data de abertura">
+              <FormRow label="Data de abertura" {...editFormRowProps}>
                 <InputController name="dataAbertura" type="date" />
               </FormRow>
             </>

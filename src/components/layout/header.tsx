@@ -22,6 +22,7 @@ import { useRouter } from "next/router";
 import { useSidebarStore } from "@/stores/sidebar-store";
 import { useState } from "react";
 import { useTenant } from "@/hooks/useTenant";
+import Image from "next/image";
 
 type HeaderProps = { showSheet: () => void };
 
@@ -73,7 +74,15 @@ export function Header({ showSheet }: HeaderProps) {
           </button>
           <p className="font-bold xs:block hidden">Empresa</p>
         </div>
-        <div className="flex flex-row lg:ml-[105px]"></div>
+        <button onClick={() => router.push("/")}>
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={220}
+            height={0}
+            className="w-40"
+          />
+        </button>
       </div>
       <div className="flex items-center font-normal flex-row-reverse gap-4">
         <Popover>

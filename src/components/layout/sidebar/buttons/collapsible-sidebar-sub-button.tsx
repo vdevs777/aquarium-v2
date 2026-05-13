@@ -15,9 +15,11 @@ export function CollapsibleSidebarSubButton({
   subSectionName,
 }: CollapsibleSidebarSubButtonInterface) {
   const [isOpen, setIsOpen] = useState(false);
+
   const router = useRouter();
 
   const path = router.pathname.split("/")[3];
+
   const isActive = path === subSectionName;
 
   function toggle() {
@@ -34,20 +36,23 @@ export function CollapsibleSidebarSubButton({
           "hover:bg-zinc-200",
         )}
       >
-        <span className={cn(" text-black", isActive && "font-bold")}>
+        <span className={cn("text-black", isActive && "font-bold")}>
           {text}
         </span>
 
         {isOpen ? (
-          <ChevronUp size={16} className={cn("text-primary")} />
+          <ChevronUp
+            size={16}
+            className="text-[var(--sidebar-color,hsl(var(--primary)))]"
+          />
         ) : (
-          <ChevronDown size={16} className={cn("text-primary")} />
+          <ChevronDown
+            size={16}
+            className="text-[var(--sidebar-color,hsl(var(--primary)))]"
+          />
         )}
-
-        {/* barra lateral */}
       </button>
 
-      {/* conteúdo colapsável com animação suave */}
       <div
         className={cn(
           "grid transition-[grid-template-rows] duration-200 ease-in-out",

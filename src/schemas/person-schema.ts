@@ -1,4 +1,4 @@
-import { errorMessages } from "@/constants/error-messages";
+import { errorMessages } from "@/utils/error-messages";
 import { PersonType } from "@/interfaces/enums/PersonType";
 import z from "zod";
 

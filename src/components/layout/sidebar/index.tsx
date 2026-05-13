@@ -6,6 +6,7 @@ import {
   DollarSign,
   Fish,
   LayoutDashboard,
+  Package,
   RefreshCcw,
   Settings,
   Settings2,
@@ -20,6 +21,7 @@ import { SidebarLabel } from "./sidebar-label";
 import { SidebarButton } from "./buttons/sidebar-button";
 import { useSidebarStore } from "@/stores/sidebar-store";
 import { CollapsibleSidebarSubButton } from "./buttons/collapsible-sidebar-sub-button";
+import { sectionColors } from "../section-colors";
 
 type SidebarProps = {
   inDialog?: boolean;
@@ -35,18 +37,41 @@ export function Sidebar({ inDialog = false }: SidebarProps) {
           !isSidebarOpen ? "hidden" : ""
         }`}
       >
-        <section className="pt-2 px-0 w-full flex flex-col gap-0">
+        <section
+          className="pt-2 px-0 w-full flex flex-col gap-0"
+          style={
+            {
+              "--sidebar-color": sectionColors.crm,
+            } as React.CSSProperties
+          }
+        >
           <SidebarLabel text="CRM" />
           <SidebarOpenButton
             sectionName="customers"
             icon={User}
             text="Clientes"
+            color={sectionColors.crm}
           >
             <SidebarSubButton text="Cadastrar" url="/crm/customers/create" />
             <SidebarSubButton text="Lista" url="/crm/customers/list" />
           </SidebarOpenButton>
+          <SidebarOpenButton
+            sectionName="suppliers"
+            icon={Package}
+            text="Fornecedores"
+          >
+            <SidebarSubButton text="Cadastrar" url="/crm/suppliers/create" />
+            <SidebarSubButton text="Lista" url="/crm/suppliers/list" />
+          </SidebarOpenButton>
         </section>
-        <section className="pt-2 px-0 w-full flex flex-col gap-0">
+        <section
+          className="pt-2 px-0 w-full flex flex-col gap-0"
+          style={
+            {
+              "--sidebar-color": sectionColors.operational,
+            } as React.CSSProperties
+          }
+        >
           <SidebarLabel text="OPERACIONAL" />
 
           <SidebarOpenButton
@@ -128,7 +153,14 @@ export function Sidebar({ inDialog = false }: SidebarProps) {
             </CollapsibleSidebarSubButton>
           </SidebarOpenButton>
         </section>
-        <section className="pt-2 px-0 w-full flex flex-col gap-0">
+        <section
+          className="pt-2 px-0 w-full flex flex-col gap-0"
+          style={
+            {
+              "--sidebar-color": sectionColors.system,
+            } as React.CSSProperties
+          }
+        >
           <SidebarLabel text="Sistema" />
 
           <SidebarOpenButton

@@ -1,4 +1,5 @@
 import { ProductionUnitModelForm } from "@/components/forms/production-unit-model-form";
+import { sectionColors } from "@/components/layout/section-colors";
 import { PageHeader } from "@/components/page-header";
 import { PageState } from "@/components/page-state";
 import { useValidatedNumberIdQuery } from "@/hooks/useValidatedNumberIdQuery";
@@ -29,6 +30,7 @@ export function ProductionUnitModelViewScreen() {
         icon={Blend}
         title={title}
         path={["Sistema", "Configurações", "Modelo de Unidade Produtiva"]}
+        color={sectionColors.system}
       />
 
       <PageState

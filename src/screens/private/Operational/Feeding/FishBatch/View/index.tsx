@@ -9,6 +9,7 @@ import { Fish } from "lucide-react";
 import { useRouter } from "next/router";
 import { Accordion } from "@/components/ui/accordion";
 import { Allocations } from "./components/allocations";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function FishBatchViewScreen() {
   const { id, data, isLoading, error, isValidId, isReady } =
@@ -32,6 +33,7 @@ export function FishBatchViewScreen() {
         title={title}
         icon={Fish}
         path={["Operacional", "Alimentação", "Lote produtivo"]}
+        color={sectionColors.operational}
       />
       <PageState
         isValidId={isValidId}

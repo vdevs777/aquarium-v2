@@ -13,6 +13,7 @@ export function SidebarButton({
   path,
   text,
   className,
+  style,
   ...rest
 }: SidebarButtonProps) {
   const router = useRouter();
@@ -26,10 +27,12 @@ export function SidebarButton({
   return (
     <button
       onClick={handleClick}
+      style={style}
       className={cn(
-        "group w-full h-8 rounded-none flex items-center justify-start gap-4 text-sm font-normal px-3  transition-all duration-75",
-        isActive ? "bg-primary text-white" : "bg-white text-black",
-        "hover:bg-primary hover:text-white",
+        "group w-full h-8 rounded-none flex items-center justify-start gap-4 text-sm font-normal px-3 transition-all duration-75",
+        "bg-white text-black",
+        "hover:bg-[var(--sidebar-color,hsl(var(--primary)))] hover:text-white",
+        isActive && "bg-[var(--sidebar-color,hsl(var(--primary)))] text-white",
         className,
       )}
       {...rest}
@@ -38,10 +41,13 @@ export function SidebarButton({
         strokeWidth={1.5}
         size={20}
         className={cn(
-          isActive ? "text-white" : "text-primary",
           "group-hover:text-white",
+          isActive
+            ? "text-white"
+            : "text-[var(--sidebar-color,hsl(var(--primary)))]",
         )}
       />
+
       <span
         className={cn(
           "group-hover:text-white",

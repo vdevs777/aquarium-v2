@@ -4,6 +4,7 @@ import { SelectController } from "@/components/controllers/select-controller";
 import { FormBox } from "@/components/form-box";
 import { FormRow } from "@/components/form-row";
 import { FormSubmitButton } from "@/components/form-submit-button";
+import { sectionColors } from "@/components/layout/section-colors";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/useToast";
@@ -63,6 +64,7 @@ export function ProductionUnitCreateScreen() {
         path={["Operacional", "Produção", "Unidade produtiva"]}
         title="Cadastrar"
         icon={LayoutDashboard}
+        color={sectionColors.operational}
       />
       <form onSubmit={handleSubmit(handleCreate)}>
         <FormBox>

@@ -27,6 +27,7 @@ import { useEditProductionUnit } from "@/queries/useEditProductionUnit";
 import { ProductionUnitEditRequest } from "@/interfaces/http/ProductionUnit/ProductionUnitEditRequest";
 import { toast } from "@/hooks/useToast";
 import { handleApiError } from "@/api/helpers/handle-api-error";
+import { sectionColors } from "@/components/layout/section-colors";
 
 export function ProductionUnitAnalysisScreen() {
   const router = useRouter();
@@ -157,6 +158,7 @@ export function ProductionUnitAnalysisScreen() {
             path={["Operacional", "Produção", "Unidade produtiva"]}
             title={title}
             icon={LayoutDashboard}
+            color={sectionColors.operational}
           />
           <div className="flex flex-row gap-2">
             <SelectProductionUnit productionUnits={productionUnits} />
