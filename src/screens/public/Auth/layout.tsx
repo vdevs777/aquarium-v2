@@ -12,7 +12,7 @@ export function AuthLayout({ title, children }: AuthLayoutProps) {
       <div className="hidden w-4/6 h-screen items-center justify-center flex-col lg:flex">
         <Image src="/logo.png" alt="Logo" width={419} height={55} />
       </div>
-      <div className="flex text-white bg-gray-100 lg:bg-blue-950 w-full lg:w-2/6 h-screen items-center justify-center flex-col px-4 lg:px-8">
+      <div className="flex bg-gray-100 lg:bg-blue-950 w-full lg:w-2/6 h-screen items-center justify-center flex-col px-4 lg:px-8">
         <Image
           src="/logo.png"
           alt="Logo"

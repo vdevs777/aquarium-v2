@@ -17,6 +17,7 @@ import { toast } from "@/hooks/useToast";
 
 import { unmask } from "@/utils/masks";
 import api from "@/api";
+import { pagesWithoutLayout } from "@/pages/_app";
 
 type AuthStatus = "authenticated" | "unauthenticated" | "loading";
 
@@ -160,6 +161,8 @@ export const useAuthStore = create<AuthStore>()(
               description: "Um e-mail de confirmação foi enviado.",
             });
           }
+
+          window.location.href = "/login";
         } catch (error) {
           handleApiError(error);
         }
@@ -197,6 +200,20 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       async validateAuth() {
+        const pathname = window.location.pathname;
+
+        const shouldSkipValidation = pagesWithoutLayout.some((route) => {
+          if (route.endsWith("/")) {
+            return pathname.startsWith(route);
+          }
+
+          return pathname === route;
+        });
+
+        if (shouldSkipValidation) {
+          return true;
+        }
+
         try {
           const authorized = await accountService.checkAuthorization();
 

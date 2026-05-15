@@ -50,6 +50,17 @@ async function checkAuthorization() {
   return response.status === 200;
 }
 
+async function forgotPassword(email: string) {
+  await PROVISORY_CLEAN_INSTANCE.post(`/forgot-password/${email}`);
+}
+
+async function confirmEmail(token: string) {
+  const response = await PROVISORY_CLEAN_INSTANCE.post(
+    `/confirm-email/${token}`,
+  );
+  return response;
+}
+
 export const accountService = {
   login,
   register,
@@ -57,4 +68,6 @@ export const accountService = {
   refreshTokenWithTenantId,
   checkAuthorization,
   resetPassword,
+  forgotPassword,
+  confirmEmail,
 };

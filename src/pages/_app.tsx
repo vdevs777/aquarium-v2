@@ -34,10 +34,16 @@ const queryClient = new QueryClient({
   },
 });
 
+export const pagesWithoutLayout = [
+  "/login",
+  "/register",
+  "/404",
+  "/forgot-password",
+  "/reset-password/",
+];
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-
-  const pagesWithoutLayout = ["/login", "/register", "/404"];
 
   useEffect(() => {
     if (env.NEXT_PUBLIC_API_MODE === "mock") {
@@ -73,16 +79,24 @@ export default function App({ Component, pageProps }: AppProps) {
     validateSession();
   }, [hasHydrated]);
 
+  const shouldUseLayout = !pagesWithoutLayout.some((route) => {
+    if (route.endsWith("/")) {
+      return router.pathname.startsWith(route);
+    }
+
+    return router.pathname === route;
+  });
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <div className={`${inter.className} bg-white`}>
-          {pagesWithoutLayout.includes(router.pathname) ? (
-            <Component {...pageProps} />
-          ) : (
+          {shouldUseLayout ? (
             <Layout>
               <Component {...pageProps} />
             </Layout>
+          ) : (
+            <Component {...pageProps} />
           )}
         </div>
 

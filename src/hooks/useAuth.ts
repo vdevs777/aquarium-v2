@@ -22,8 +22,6 @@ export function useAuth() {
 
   async function register(...args: Parameters<typeof store.register>) {
     await store.register(...args);
-
-    router.push("/login");
   }
 
   return {
