@@ -7,3 +7,10 @@ dotenv.config({ path: ".env.test" });
 vi.mock("next/link", () => ({
   default: ({ children }: any) => children,
 }));
+
+vi.mock("next/font/google", () => ({
+  Inter: () => ({
+    className: "inter",
+    variable: "--font-inter",
+  }),
+}));
