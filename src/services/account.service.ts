@@ -5,6 +5,7 @@ import { RegisterUser } from "@/interfaces/http/Auth/RegisterUser";
 import { CompanyModel } from "@/interfaces/models/Company";
 import { LoginSchema } from "@/schemas/login-schema";
 import axios from "axios";
+import { ResetPasswordRequest } from "@/interfaces/http/Auth/ResetPassword";
 
 const baseURL = env.NEXT_PUBLIC_API_URL!;
 
@@ -25,6 +26,10 @@ async function register(request: RegisterUser): Promise<"success" | "pending"> {
   if (response.status === 201) return "pending";
 
   return "success";
+}
+
+async function resetPassword(data: ResetPasswordRequest) {
+  await PROVISORY_CLEAN_INSTANCE.post("/reset-password", data);
 }
 
 async function getCompanies() {
@@ -51,4 +56,5 @@ export const accountService = {
   getCompanies,
   refreshTokenWithTenantId,
   checkAuthorization,
+  resetPassword,
 };

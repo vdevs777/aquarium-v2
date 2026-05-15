@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/router";
 import { Spinner } from "../spinner";
 import { Button } from "../button";
+import { NoResults } from "@/components/no-results";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -191,14 +192,7 @@ export function DataTable<TData, TValue>({
             </>
           ) : (
             <>
-              <TableRow>
-                <TableCell
-                  colSpan={colSpan}
-                  className="h-12 text-center text-muted-foreground"
-                >
-                  Não foram encontrados resultados
-                </TableCell>
-              </TableRow>
+              <NoResults colSpan={colSpan} />
 
               {onCreate && (
                 <TableRow>

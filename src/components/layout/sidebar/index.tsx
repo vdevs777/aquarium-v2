@@ -168,6 +168,21 @@ export function Sidebar({ inDialog = false }: SidebarProps) {
                 insideCollapsible
               />
             </CollapsibleSidebarSubButton>
+            <CollapsibleSidebarSubButton
+              subSectionName="feeding-plan"
+              text="Plano alimentar"
+            >
+              <SidebarSubButton
+                text="Lista"
+                url="/operational/feeding/feeding-plan/list"
+                insideCollapsible
+              />
+              <SidebarSubButton
+                text="Cadastrar"
+                url="/operational/feeding/feeding-plan/create"
+                insideCollapsible
+              />
+            </CollapsibleSidebarSubButton>
           </SidebarOpenButton>
         </section>
         <section

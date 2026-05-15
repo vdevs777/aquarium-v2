@@ -1,4 +1,5 @@
 import { sectionColors } from "@/components/layout/section-colors";
+import { NoResults } from "@/components/no-results";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -96,7 +97,7 @@ export function FeedingDashboardScreen() {
         </div>
       </div>
 
-      <div className="border rounded-md overflow-hidden max-w-[83.1vw]">
+      <div className="border rounded-md overflow-hidden max-w-[83vw]">
         <div className="overflow-x-auto">
           <Table className="w-max min-w-full">
             <TableHeader>
@@ -104,7 +105,6 @@ export function FeedingDashboardScreen() {
                 <TableHead className="sticky left-0 z-30 bg-background min-w-[140px]">
                   Unid. prod
                 </TableHead>
-
                 <TableHead
                   className="
     sticky left-[140px] z-30 bg-background min-w-[180px]
@@ -127,69 +127,73 @@ export function FeedingDashboardScreen() {
             </TableHeader>
 
             <TableBody>
-              {filteredProductionUnits.map((unit, idx) => (
-                <TableRow key={`${unit.id}-${unit.idSetorProdutivo}-${idx}`}>
-                  <TableCell className="sticky left-0 z-20 bg-white min-w-[140px]">
-                    <Link
-                      href={`/operational/production/production-unit/analysis?id=${unit.id}`}
-                      className="text-blue-500 hover:underline"
-                    >
-                      {unit.codigo}.{unit.sequencia}
-                    </Link>
-                  </TableCell>
+              {filteredProductionUnits.length > 0 ? (
+                filteredProductionUnits.map((unit, idx) => (
+                  <TableRow key={`${unit.id}-${unit.idSetorProdutivo}-${idx}`}>
+                    <TableCell className="sticky left-0 z-20 bg-white min-w-[140px]">
+                      <Link
+                        href={`/operational/production/production-unit/analysis?id=${unit.id}`}
+                        className="text-blue-500 hover:underline"
+                      >
+                        {unit.codigo}.{unit.sequencia}
+                      </Link>
+                    </TableCell>
 
-                  <TableCell
-                    className="
+                    <TableCell
+                      className="
     sticky left-[140px] z-20 bg-white min-w-[180px]
     after:absolute after:top-0 after:right-0 after:h-full
     after:w-[1px] after:bg-border
     after:shadow-[4px_0_8px_rgba(0,0,0,0.12)]
   "
-                  >
-                    <Link
-                      href={`/operational/production/culture-stage/view/${unit.idFaseCultivo}`}
-                      className="text-blue-500 hover:underline"
                     >
-                      {unit.faseCultivo}
-                    </Link>
-                  </TableCell>
+                      <Link
+                        href={`/operational/production/culture-stage/view/${unit.idFaseCultivo}`}
+                        className="text-blue-500 hover:underline"
+                      >
+                        {unit.faseCultivo}
+                      </Link>
+                    </TableCell>
 
-                  <TableCell>{unit.fatorConversaoAlimentar}</TableCell>
+                    <TableCell>{unit.fatorConversaoAlimentar}</TableCell>
 
-                  <TableCell>
-                    {formatNumber(unit.numeroPeixes, {
-                      minimumFractionDigits: 0,
-                    })}
-                  </TableCell>
+                    <TableCell>
+                      {formatNumber(unit.numeroPeixes, {
+                        minimumFractionDigits: 0,
+                      })}
+                    </TableCell>
 
-                  <TableCell>0</TableCell>
-                  <TableCell>0</TableCell>
+                    <TableCell>0</TableCell>
+                    <TableCell>0</TableCell>
 
-                  <TableCell>{formatNumber(unit.pesoMedio)}</TableCell>
+                    <TableCell>{formatNumber(unit.pesoMedio)}</TableCell>
 
-                  <TableCell>0</TableCell>
+                    <TableCell>0</TableCell>
 
-                  <TableCell>
-                    <div
-                      className="grid gap-1.5 items-end"
-                      style={{
-                        gridAutoFlow: "column",
-                        gridAutoColumns: "110px",
-                      }}
-                    >
-                      {Array.from({
-                        length: unit.frequenciaAlimentar ?? 0,
-                      }).map((_, idx) => (
-                        <Input key={idx} className="h-[25px]" />
-                      ))}
-                    </div>
-                  </TableCell>
+                    <TableCell>
+                      <div
+                        className="grid gap-1.5 items-end"
+                        style={{
+                          gridAutoFlow: "column",
+                          gridAutoColumns: "110px",
+                        }}
+                      >
+                        {Array.from({
+                          length: unit.frequenciaAlimentar ?? 0,
+                        }).map((_, idx) => (
+                          <Input key={idx} className="h-[25px]" />
+                        ))}
+                      </div>
+                    </TableCell>
 
-                  <TableCell>
-                    <Input className="w-[110px] h-[25px]" />
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <TableCell>
+                      <Input className="w-[110px] h-[25px]" />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <NoResults colSpan={10} />
+              )}
             </TableBody>
           </Table>
         </div>

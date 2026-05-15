@@ -117,7 +117,7 @@ export function Header({ showSheet }: HeaderProps) {
               <Button
                 variant="ghost"
                 className="justify-start items-center rounded-none hover:bg-primary/10 gap-2 h-9 ring-0"
-                // onClick={() => router.push(routes.profile)}
+                onClick={() => router.push("/profile")}
               >
                 <UserRound strokeWidth="1.5px" width={20} /> Perfil
               </Button>
