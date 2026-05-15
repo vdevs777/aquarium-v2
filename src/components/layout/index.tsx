@@ -2,6 +2,7 @@ import { PropsWithChildren, useState } from "react";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { version } from "../../../package.json";
 
 export function Layout({ children }: PropsWithChildren) {
   const [isShowSheet, setIsShowSheet] = useState(false);
@@ -24,7 +25,7 @@ export function Layout({ children }: PropsWithChildren) {
         <div className="p-5 bg-gray-50 w-full">{children}</div>
       </div>
       <footer className="bg-white h-auto text-xs py-1 flex items-center justify-center">
-        © 2024-{new Date().getFullYear()} IotarJR - Versão: xxx-xxx
+        © 2024-{new Date().getFullYear()} IotarJR - Versão: {version}
       </footer>
     </div>
   );
